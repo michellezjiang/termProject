@@ -2,6 +2,8 @@ from cmu_graphics import *
 from startPage import *
 from rules import *
 from setUp import *
+from prompt import *
+from canvas import *
 
 def start_redrawAll(app):
     drawMenuBox(app)
@@ -24,6 +26,37 @@ def setUp_redrawAll(app):
     drawNameConfirmButton(app)
     drawButtonLabels(app)
     drawButtonIlluminations(app)
+
+def prompt_redrawAll(app):
+    drawWriteScreen(app)
+    drawPromptScreen(app)
+    promptConfirmIllum(app)
+    drawPrompt(app)
+
+
+def canvas_redrawAll(app):
+    colorButtons(app)
+    sizeButtons(app)
+    otherButtons(app)
+    drawRect(app.canvasX, app.canvasY, app.canvasWidth, app.canvasHeight, align='center', fill='white', border='darkGray')
+    for i in range(len(app.lines)):
+        for j in range(len(app.lines[i])-1):
+            drawLine(app.lines[i][j][0], app.lines[i][j][1], app.lines[i][j+1][0], app.lines[i][j+1][1], fill=app.penColorSize[i][0][0], lineWidth=app.penColorSize[i][0][1])
+    drawEraser(app)
+    completeDrawing(app)
+    opacitySlider(app)
+    selectColor(app)
+    illumModes(app)
+    selectSize(app)
+    writeText(app)
+    drawLines(app)
+    drawStick(app)
+    drawPopUp(app)
+    drawPromptonCanvas(app)
+
+def gallery_redrawAll(app):
+    drawLabel("coming soon", app.width/2, app.height/2, align='center')
+
 
 def main():
     runAppWithScreens(initialScreen='start')

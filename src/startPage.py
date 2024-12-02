@@ -36,6 +36,7 @@ def onResize(app):
     app.logoX = app.width/2
     app.logoY = app.menuY - app.menuHeight/2 - 50
 
+
 def drawMenuBox(app):
     drawRect(app.menuX, app.menuY, app.menuWidth, app.menuHeight, align='center', fill=None, border='darkGray')
     imageWidth, imageHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/DrawPhone.png')

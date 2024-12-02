@@ -2,6 +2,76 @@ from cmu_graphics import *
 import string
 
 def onAppStart(app):
+    ##############
+    #START PAGE APPS
+    ##############
+    #menu dimensions
+    app.height = 800
+    app.width = 800
+    app.menuX = app.width/2
+    app.menuY = app.height/2
+    app.menuWidth = 400
+    app.menuHeight = 500
+
+    #logo
+    app.logoX = app.width/2
+    app.logoY = app.menuY - app.menuHeight/2 - 75
+
+    #startButtons
+    app.newGameX = app.width/2
+    app.newGameY = app.height/2 - 100
+    
+    app.rulesX = app.width/2
+    app.rulesY = app.height/2 + 100
+
+    app.startButtonWidth = 300
+    app.startButtonHeight = 50
+
+    app.illumStartButton = False
+    app.illumRulesButton = False
+
+    ##############
+    #RULES APP
+    ##############
+    #use same dimensions as menu
+    app.drawRule1 = True
+    app.drawRule2 = False
+    app.drawRule3 = False
+    app.drawRule4 = False
+    app.drawRule5 = False
+
+    app.arrowIllumButton = False
+    app.resetIllumButton = False
+    app.homeIllumButton = False
+
+    ##############
+    #SETUP APPS
+    ##############
+    app.numPlayersStr = ''
+    app.numPlayersConfirmButton = False
+    app.numPlayersConfirmButtonIllum = False
+    app.numPlayersType = False
+    app.numPlayersShow = False
+    app.numPlayersConfirmed = False
+
+    app.playerNames = []
+    app.nameIndex = 1
+    app.nameType = False
+    app.name = ''
+    app.nameConfirm = False
+    app.nameConfirmButtonIllum = False
+
+
+    ###########
+    #PROMPT APPS
+    ###########
+    app.writeScreen = True
+    app.typePrompt = False
+    app.prompt = ''
+    app.promptConfirm = False
+    app.promptIllum = False
+    app.promptList = []
+
     #canvas dimensions
     app.height = 800
     app.width = 800
@@ -66,31 +136,12 @@ def onResize(app):
     app.canvasX = app.width/2              
     app.canvasY = app.height/2      
 
-def redrawAll(app):
-    colorButtons(app)
-    sizeButtons(app)
-    otherButtons(app)
-    drawRect(app.canvasX, app.canvasY, app.canvasWidth, app.canvasHeight, align='center', fill='white', border='darkGray')
-    for i in range(len(app.lines)):
-        for j in range(len(app.lines[i])-1):
-            drawLine(app.lines[i][j][0], app.lines[i][j][1], app.lines[i][j+1][0], app.lines[i][j+1][1], fill=app.penColorSize[i][0][0], lineWidth=app.penColorSize[i][0][1])
-    drawEraser(app)
-    completeDrawing(app)
-    opacitySlider(app)
-    selectColor(app)
-    illumModes(app)
-    selectSize(app)
-    writeText(app)
-    drawLines(app)
-    drawStick(app)
-    drawPopUp(app)
-
 
 def drawEraser(app):
     if app.mode=='erase' and app.eraseCircle:
         drawCircle(app.eraseCircleX, app.eraseCircleY, 10, border='black', fill='white')
             
-def onMouseRelease(app, mouseX, mouseY):
+def canvas_onMouseRelease(app, mouseX, mouseY):
     app.drawmode = False
     if app.eraseCircle == True:
         app.eraseCircle = False
@@ -129,7 +180,7 @@ def midpoint(point1, point2):
     return ((point1[0]+point2[0])/2, (point2[1]+point2[1])/2)
 
 
-def onMouseDrag(app, mouseX, mouseY):
+def canvas_onMouseDrag(app, mouseX, mouseY):
     if app.mode =='pen' and app.drawmode:
         app.penQualities = (app.penColor, app.penSize)
         if (app.canvasX - app.canvasWidth/2 < mouseX < app.canvasX + app.canvasWidth/2
@@ -161,7 +212,7 @@ def drawLines(app):
     for i in range(len(app.dragLinePositions)):
         drawLine(app.dragLinePositions[i][0], app.dragLinePositions[i][1], app.dragLinePositions[i][2], app.dragLinePositions[i][3], fill=app.dragLinePositions[i][4], lineWidth=app.dragLinePositions[i][5])
 
-def onMousePress(app, mouseX, mouseY):
+def canvas_onMousePress(app, mouseX, mouseY):
     if app.mode == 'shape' and ((mouseX < app.width/2 - 150 or mouseX > app.width/2 + 150)
         or (mouseY < app.height/2 - 200 or mouseY > app.width/2 + 200)):
         app.mode = 'pen'
@@ -227,7 +278,7 @@ def drawStick(app):
 
 
 
-def onKeyPress(app, key):
+def canvas_onKeyPress(app, key):
     if app.textModeType:
         if key in string.ascii_letters or key in string.digits or key in string.punctuation:
             app.text += key
@@ -460,7 +511,7 @@ def selectColor(app):
     elif app.whiteSelected:
         drawCircle(app.canvasX - (app.canvasWidth/2) + 30 + 75, app.canvasY + (app.canvasHeight/2) + 110, 30, fill=None, border='darkGray')
 
-def onMouseMove(app, mouseX, mouseY):
+def canvas_onMouseMove(app, mouseX, mouseY):
     if ((app.canvasX - (app.canvasWidth/2) + (30) + 250 - 25 <= mouseX <= app.canvasX - (app.canvasWidth/2) + (30) + 250 + 25) and 
         (app.canvasY + (app.canvasHeight/2) + 35 - 25 <= mouseY <= app.canvasY + (app.canvasHeight/2) + 35 + 25)):
         app.penModeIllum = True
@@ -508,8 +559,8 @@ def illumModes(app):
 
 def distance(x0, y0, x1, y1):
     return ((x0-x1)**2+(y0-y1)**2)**0.5
-        
-def main():
-    runApp()
 
-main()
+def drawPromptonCanvas(app):
+    drawRect(app.canvasX, app.canvasY - app.canvasHeight/2 - 50, app.canvasWidth, 50, fill="white", align='center', border='darkGray')
+    if len(app.promptList) > 0:
+        drawLabel(f'{app.playerNames[app.nameIndex]}, draw: ' + app.promptList[-1], app.canvasX - app.canvasWidth/2 + 18, app.canvasY - app.canvasHeight/2 - 50, size=20, align= 'left')

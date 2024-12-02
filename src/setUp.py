@@ -115,13 +115,13 @@ def setUp_onMousePress(app, mouseX, mouseY):
             if app.nameIndex < int(app.numPlayersStr):
                 app.nameIndex += 1
                 app.playerNames.append(app.name)
+                print(app.playerNames)
                 app.name = ''
                 app.nameConfirm = False
                 app.nameConfirmButtonIllum = False
-
             else:
-                pass
-                # setActiveScreen('prompt')
+                app.playerNames.append(app.name)
+                setActiveScreen('prompt')
 
 def drawNameConfirmButton(app):
     if app.nameConfirm:
@@ -147,14 +147,14 @@ def setUp_onKeyPress(app, key):
 
 def drawNumPlayers(app):
     if app.numPlayersShow:
-        drawLabel(app.numPlayersStr, app.menuX + app.menuWidth/2 - 25 - 125 + 8, app.menuY - app.menuHeight/2 + 70, size=25, align='left')
+        drawLabel(app.numPlayersStr + '|', app.menuX + app.menuWidth/2 - 25 - 125 + 8, app.menuY - app.menuHeight/2 + 70, size=25, align='left')
 
 def enterNames(app):
     if app.numPlayersConfirmed and app.nameIndex < int(app.numPlayersStr)+1:
         drawLabel(f'Player {app.nameIndex} Name:', app.menuX - app.menuWidth/2 + 25, app.menuY, size=25, align='left')
         drawRect(app.menuX - app.menuWidth/2 + 25, app.menuY + 50, app.menuWidth - 50,45, fill=None, border='darkGray', align='left')
         if app.nameType:
-            drawLabel(app.name, app.menuX - app.menuWidth/2 + 25 + 8, app.menuY + 50, size=25, align = 'left')
+            drawLabel(app.name + '|', app.menuX - app.menuWidth/2 + 25 + 8, app.menuY + 50, size=25, align = 'left')
 
 def drawButtonLabels(app):
     if app.numPlayersConfirmButton:
@@ -197,6 +197,7 @@ def drawButtonIlluminations(app):
         drawRect(app.menuX + app.menuWidth/2 - 25, app.menuY - app.menuHeight/2 + 70 + 45/2+ 60, 70, 45, fill='purple', opacity=60,border='darkGray', align='right-bottom')
     if app.nameConfirmButtonIllum:
         drawRect(app.menuX + app.menuWidth/2 - 25, app.menuY + 50 + 45/2 + 60, 70, 45, align='right-bottom', fill='purple', border='darkGray', opacity = 60)
+
 
     
 
