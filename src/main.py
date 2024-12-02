@@ -4,6 +4,7 @@ from rules import *
 from setUp import *
 from prompt import *
 from canvas import *
+from gallery import *
 
 def start_redrawAll(app):
     drawMenuBox(app)
@@ -51,12 +52,15 @@ def canvas_redrawAll(app):
     writeText(app)
     drawLines(app)
     drawStick(app)
-    drawPopUp(app)
     drawPromptonCanvas(app)
+    drawPopUp(app)
 
 def gallery_redrawAll(app):
-    drawLabel("coming soon", app.width/2, app.height/2, align='center')
-
+    drawGalleryWord(app)
+    drawEndPromptScreen(app)
+    drawDrawingScreen(app)
+    drawArrow(app)
+    drawFinish(app)
 
 def main():
     runAppWithScreens(initialScreen='start')

@@ -1,4 +1,5 @@
 from cmu_graphics import *
+from storePlayer import *
 import string
 
 def onAppStart(app):
@@ -128,6 +129,10 @@ def onAppStart(app):
     app.shapeSticker = None
     app.stickX, app.stickY = None, None
     app.stickPos = []
+    ###########
+    #GALLERY APPS
+    ###########
+    app.allPlayers = []
 
 
 def onResize(app):
@@ -256,6 +261,17 @@ def canvas_onMousePress(app, mouseX, mouseY):
         app.stickX = mouseX
         app.stickY = mouseY
 
+
+    if ((app.canvasX - (app.canvasWidth/2) + 500 + 180 - 25 <= mouseX <= app.canvasX - (app.canvasWidth/2) + 500 + 180 + 25)
+        and (app.canvasY + (app.canvasHeight/2) + 110 - 25 <= mouseY <= app.canvasY + (app.canvasHeight/2) + 110 + 25)):
+        newPlayer = Player(app.playerNames[app.nameIndex], None, [app.lines, app.penColorSize, app.dragLinePositions, app.stickPos, app.textList, app.textPositions])
+        app.allPlayers.append(newPlayer)
+        if app.nameIndex < len(app.playerNames) - 1:
+            app.nameIndex += 1
+            setActiveScreen('prompt')
+        else:
+            setActiveScreen('gallery')
+
 def drawStick(app):
     if app.mode == 'shapeDraw':
         if app.stickX != None and app.shapeSticker=='sq':
@@ -267,7 +283,6 @@ def drawStick(app):
         elif app.stickX != None and app.shapeSticker == 'star':
             drawStar(app.stickX, app.stickY, app.penSize**2, 5, fill=app.penColor)
             drawCircle(app.stickX, app.stickY, 5, fill='darkGray')
-
     for i in range(len(app.stickPos)):
         if app.stickPos[i][0] == 'sq':
             drawRect(app.stickPos[i][1], app.stickPos[i][2], app.stickPos[i][3], app.stickPos[i][3], fill=app.stickPos[i][4])
@@ -276,6 +291,7 @@ def drawStick(app):
         elif app.stickPos[i][0] == 'star':
             drawStar(app.stickPos[i][1], app.stickPos[i][2], app.stickPos[i][3], 5)
 
+    
 
 
 def canvas_onKeyPress(app, key):

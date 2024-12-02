@@ -1,4 +1,5 @@
 from cmu_graphics import *
+from storePlayer import *
 import string
 
 def onAppStart(app):
@@ -72,6 +73,11 @@ def onAppStart(app):
     app.promptIllum = False
     app.promptList = []
 
+    ###########
+    #GALLERY APPS
+    ###########
+    app.allPlayers = []
+
 def drawWriteScreen(app):
     if app.writeScreen:
         writeWidth, writeHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/write.png')
@@ -86,7 +92,6 @@ def prompt_onMousePress(app, mouseX, mouseY):
     else:
         if (((app.width/2)-(560/2) <= mouseX <= (app.width/2)+(560/2)) and 
             ((app.height/2)- (45/2) <= mouseY <= (app.height/2)+(45/2))):
-            print('hi')
             app.typePrompt = True
 
         if app.promptConfirm:
@@ -94,10 +99,16 @@ def prompt_onMousePress(app, mouseX, mouseY):
                 (app.height/2+(45/2) + 68 - 45 <= mouseY <=app.height/2+(45/2) + 68)):
                 if app.nameIndex < len(app.playerNames) - 1:
                     app.promptList.append(app.prompt)
+                    newPlayer = Player(app.playerNames[app.nameIndex], app.prompt, None)
+                    app.allPlayers.append(newPlayer)
                     app.nameIndex += 1
+                    app.prompt = ''
                     setActiveScreen('canvas')
                 else:
+                    newPlayer = Player(app.playerNames[app.nameIndex], app.prompt, None)
+                    app.allPlayers.append(newPlayer)
                     app.promptList.append(app.prompt)
+                    app.prompt = ''
                     setActiveScreen('gallery')
 
 def drawPromptScreen(app):
