@@ -77,12 +77,22 @@ def onAppStart(app):
     #GALLERY APPS
     ###########
     app.allPlayers = []
+    app.drawNextPreview = False
+    app.canMove = False
+    app.galleryWord = True
+    app.drawFinishOn = False
+
+    app.erasedPositions = [[]]
+    app.drawHomeIllum = False
+
+
 
 def drawWriteScreen(app):
+    #font is from 1001 fonts Fontalicious
     if app.writeScreen:
         writeWidth, writeHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/write.png')
         drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/write.png', app.width/2, app.height/2, align='center', width=writeWidth*0.4, height=writeHeight*0.4)
-        drawLabel('click to begin', app.width/2, app.height/2 + 200, align='center', fill='darkGray')
+        drawLabel('click to begin', app.width/2, app.height/2 + 200, align='center', fill='darkGray', font='caveat')
 
 def prompt_onMousePress(app, mouseX, mouseY):
     if app.writeScreen:
@@ -115,21 +125,21 @@ def drawPromptScreen(app):
     if not app.writeScreen:
         drawRect(app.width/2, app.height/2, 600, 400, fill='white', border='darkGray', align='center')
         if app.nameIndex == 0:
-            drawLabel(f'{app.playerNames[app.nameIndex]}, please enter a prompt below: ', app.width/2 - 300 + 18, app.height/2 - 200 + 18, size=20, align='left-top')
-            drawLabel('let your imagination run wild...', app.width/2 - 300 + 18, app.height/2 - 200 + 18 + 30, size=15, align='left-top')
+            drawLabel(f'{app.playerNames[app.nameIndex]}, please enter a prompt below: ', app.width/2 - 300 + 18, app.height/2 - 200 + 18, size=20, align='left-top', font='monospace')
+            drawLabel('let your imagination run wild...', app.width/2 - 300 + 18, app.height/2 - 200 + 18 + 30, size=15, align='left-top', font='monospace')
 
         else:
-            drawLabel(f'{app.playerNames[app.nameIndex]}, what did you just see? ', app.width/2 - 300 + 18, app.height/2 - 200 + 18, size=20, align='left-top')
-            drawLabel('let your imagination run wild...', app.width/2 - 300 + 18, app.height/2 - 200 + 18 + 30, size=15, align='left-top')
+            drawLabel(f'{app.playerNames[app.nameIndex]}, what did you just see? ', app.width/2 - 300 + 18, app.height/2 - 200 + 18, size=20, align='left-top', font='monospace')
+            drawLabel('let your imagination run wild...', app.width/2 - 300 + 18, app.height/2 - 200 + 18 + 30, size=15, align='left-top', font='monospace')
 
         drawRect(app.width/2, app.height/2, 560, 45, fill='white', align='center', border='darkGray')
-        drawLabel(f'{50-len(app.prompt)}/50', app.width/2 + (560/2), app.height/2+(45/2)+10, fill='darkGray', align='right-bottom')
+        drawLabel(f'{50-len(app.prompt)}/50', app.width/2 + (560/2), app.height/2+(45/2)+10, fill='darkGray', align='right-bottom', font='monospace')
 
         if app.promptConfirm:
             drawRect(app.width/2 + (560/2), app.height/2+(45/2) + 68, 70, 45, fill='white', align='right-bottom', border='darkGray')
             checkWidth, checkHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/rules.png')
             drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/check.png', app.width/2 + (560/2) - 70/2, app.height/2+(45/2) + 65 - 45/2, width=checkWidth*0.015, height=checkWidth*0.015, align='center')
-
+            #icon from Flaticon Freepik
 
 def prompt_onKeyPress(app, key):
     if app.typePrompt:
@@ -148,7 +158,7 @@ def prompt_onKeyPress(app, key):
 
 def drawPrompt(app):
     if app.typePrompt:
-        drawLabel(app.prompt + '|', app.width/2- (560/2) + 10, app.height/2, align='left', size=25)
+        drawLabel(app.prompt + '|', app.width/2- (560/2) + 10, app.height/2, align='left', size=18, font='monospace')
 
 def prompt_onMouseMove(app, mouseX, mouseY):
     if ((app.width/2 + (560/2) - 70<= mouseX <= app.width/2 + (560/2)) and 

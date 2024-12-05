@@ -26,6 +26,17 @@ def onAppStart(app):
     app.illumStartButton = False
     app.illumRulesButton = False
 
+    app.drawNextPreview = False
+    app.canMove = False
+    app.galleryWord = True
+    app.drawFinishOn = False
+
+    app.erasedPositions = [[]]
+    app.drawHomeIllum = False
+
+
+
+
 def onResize(app):
     app.menuX = app.width/2
     app.menuY = app.height/2
@@ -37,23 +48,27 @@ def onResize(app):
     app.logoY = app.menuY - app.menuHeight/2 - 50
 
 
+
 def drawMenuBox(app):
-    drawRect(app.menuX, app.menuY, app.menuWidth, app.menuHeight, align='center', fill=None, border='darkGray')
-    imageWidth, imageHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/DrawPhone.png')
-    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/DrawPhone.png', app.logoX, app.logoY, width = 0.25*imageWidth, height= 0.25*imageHeight, align='center')
+    #font is from 1001 fonts Fontalicious
+    bg1Width, bg1Height = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/background1.jpg')
+    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/background1.jpg', app.width/2, app.height/2, align='center', width=bg1Width*0.85, height=bg1Height*0.85)
+    drawRect(app.menuX, app.menuY, app.menuWidth, app.menuHeight, align='center', fill='lavender', border='black', opacity=90)
+    imageWidth, imageHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/drawphone.png')
+    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/drawphone.png', app.logoX, app.logoY, width = 0.5*imageWidth, height= 0.5*imageHeight, align='center')
 
 def drawButtons(app):
-    drawRect(app.newGameX, app.newGameY, app.startButtonWidth, app.startButtonHeight, fill=None, border = 'darkGray', align='center')
-    drawRect(app.rulesX, app.rulesY, app.startButtonWidth, app.startButtonHeight, fill=None, border = 'darkGray', align='center')
-    drawLabel("New Game", app.newGameX, app.newGameY, size=25, align='center')
-    drawLabel("How to Play", app.rulesX, app.rulesY, size=25, align='center')
+    drawRect(app.newGameX, app.newGameY, app.startButtonWidth, app.startButtonHeight, fill=None, border = 'black', align='center')
+    drawRect(app.rulesX, app.rulesY, app.startButtonWidth, app.startButtonHeight, fill=None, border = 'black', align='center')
+    drawLabel("New Game", app.newGameX, app.newGameY, size=25, align='center', font='monospace')
+    drawLabel("How to Play", app.rulesX, app.rulesY, size=25, align='center', font='monospace')
 
 def drawIllumButtons(app):
     if app.illumStartButton:
-        drawRect(app.newGameX, app.newGameY, app.startButtonWidth, app.startButtonHeight, fill='purple', border = 'darkGray', align='center', opacity=60)
+        drawRect(app.newGameX, app.newGameY, app.startButtonWidth, app.startButtonHeight, fill='plum', border = 'darkGray', align='center', opacity=60)
 
     if app.illumRulesButton:
-        drawRect(app.rulesX, app.rulesY, app.startButtonWidth, app.startButtonHeight, fill='purple', border = 'darkGray', align='center', opacity=60)
+        drawRect(app.rulesX, app.rulesY, app.startButtonWidth, app.startButtonHeight, fill='plum', border = 'darkGray', align='center', opacity=60)
 
 def start_onMouseMove(app, mouseX, mouseY):
     if ((app.newGameX - app.startButtonWidth/2 <= mouseX <= app.newGameX + app.startButtonWidth/2) and 

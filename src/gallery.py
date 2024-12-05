@@ -98,6 +98,8 @@ def onAppStart(app):
     
     #testing
     app.drawmode = True
+    app.drawNextPreview = False
+
 
     #canvas selecting variables
     app.blackSelected = True
@@ -134,23 +136,28 @@ def onAppStart(app):
     app.allPlayers = []
     app.galleryWord = True
     app.drawFinishOn = False
+    app.canMove = False
+
+    app.erasedPositions = [[]]
+    app.drawHomeIllum = False
+
 
 def drawGalleryWord(app):
     if app.galleryWord:
-        drawLabel('click to begin', app.width/2, app.height/2)
+        drawLabel('click to begin', app.width/2, app.height/2, font='monospace')
 
 def drawEndPromptScreen(app):
     if not app.galleryWord:
         if app.allPlayers[app.nameIndex].prompt != None:
             drawRect(app.width/2, app.height/2, 600, 400, fill='white', border='darkGray', align='center')
             if app.nameIndex == 0:
-                drawLabel(f'{app.allPlayers[app.nameIndex].name} decided on the prompt: ', app.width/2 - 300 + 18, app.height/2 - 200 + 18, size=20, align='left-top')
+                drawLabel(f'{app.allPlayers[app.nameIndex].name} decided on the prompt: ', app.width/2 - 300 + 18, app.height/2 - 200 + 18, size=20, align='left-top', font='monospace')
                 drawRect(app.width/2, app.height/2, 560, 45, fill='white', align='center', border='darkGray')
-                drawLabel(app.allPlayers[app.nameIndex].prompt, app.width/2- (560/2) + 10, app.height/2, align='left', size=25)
+                drawLabel(app.allPlayers[app.nameIndex].prompt, app.width/2- (560/2) + 10, app.height/2, align='left', size=18, font='monospace')
             else:
-                drawLabel(f'{app.allPlayers[app.nameIndex].name} thought that drawing was: ', app.width/2 - 300 + 18, app.height/2 - 200 + 18, size=20, align='left-top')
+                drawLabel(f'{app.allPlayers[app.nameIndex].name} thought that drawing was: ', app.width/2 - 300 + 18, app.height/2 - 200 + 18, size=20, align='left-top', font='monospace')
                 drawRect(app.width/2, app.height/2, 560, 45, fill='white', align='center', border='darkGray')
-                drawLabel(app.allPlayers[app.nameIndex].prompt, app.width/2- (560/2) + 10, app.height/2, align='left', size=25)
+                drawLabel(app.allPlayers[app.nameIndex].prompt, app.width/2- (560/2) + 10, app.height/2, align='left', size=20, font='monospace')
 
 def drawFinalLines(app):
     if not app.galleryWord:
@@ -183,13 +190,13 @@ def drawDrawingScreen(app):
         if app.allPlayers[app.nameIndex].drawing != None:
             drawRect(app.canvasX, app.canvasY, app.canvasWidth, app.canvasHeight, align='center', fill='white', border='darkGray')
             drawRect(app.canvasX, app.canvasY - app.canvasHeight/2 - 50, app.canvasWidth, 50, fill="white", align='center', border='darkGray')
-            drawLabel(f'{app.allPlayers[app.nameIndex].name} drew:', app.canvasX - app.canvasWidth/2 + 18, app.canvasY - app.canvasHeight/2 - 50, size=20, align= 'left')
+            drawLabel(f'{app.allPlayers[app.nameIndex].name} drew:', app.canvasX - app.canvasWidth/2 + 18, app.canvasY - app.canvasHeight/2 - 50, size=20, align= 'left', font='monospace')
             drawFinalLines(app)
             drawFinalDragLines(app)
             drawFinalStick(app)
             drawFinalText(app)
 
-def drawArrow(app):
+def drawFinalArrow(app):
     if not app.galleryWord:
         if app.allPlayers[app.nameIndex].drawing != None:
             drawRect(app.canvasX + app.canvasWidth/2, app.canvasY + app.canvasHeight/2 + 45 + 18, 45, 45, fill='white', border='darkGray', align='right-bottom')
@@ -200,17 +207,17 @@ def drawArrow(app):
             drawLabel(">", app.width/2 + 300 - 45/2, app.height/2 + 200 + 45 + 18 - 45/2, align='center', size=30)
 
 def gallery_onMousePress(app, mouseX, mouseY):
-    if app.galleryWord:
+    if app.galleryWord and app.drawFinishOn != True:
         app.nameIndex = 0
         app.galleryWord = False
-    if app.allPlayers[app.nameIndex].drawing != None:
+    if app.allPlayers[app.nameIndex].drawing != None and app.drawFinishOn != True:
         if ((app.canvasX + app.canvasWidth/2 - 45<= mouseX <= app.canvasX + app.canvasWidth/2) and 
             (app.canvasY + app.canvasHeight/2 + 18 <= mouseY <=app.canvasY + app.canvasHeight/2 + 45 + 18)):
             if app.nameIndex < len(app.allPlayers) - 1:
                 app.nameIndex += 1
             else:
                 app.drawFinishOn = True
-    elif app.allPlayers[app.nameIndex].prompt != None:
+    elif app.allPlayers[app.nameIndex].prompt != None and app.drawFinishOn != True:
         if ((app.width/2 + 300 - 45 <= mouseX <= app.width/2 + 300) and 
             (app.height/2 + 200 + 45 + 18 - 45 <= mouseY <= app.height/2 + 200 + 45 + 18)):
             if app.nameIndex < len(app.allPlayers) - 1:
@@ -218,10 +225,113 @@ def gallery_onMousePress(app, mouseX, mouseY):
             else:
                 app.drawFinishOn = True
 
+    if app.drawFinishOn:
+        if ((app.width/2 - 100 <= mouseX <= app.width/2 + 100) and 
+            (app.height/2 + 100 - 45/2 <= mouseY <= app.height/2 + 100 + 45/2)):
+            app.numPlayersStr = ''
+            app.numPlayersConfirmButton = False
+            app.numPlayersConfirmButtonIllum = False
+            app.numPlayersType = False
+            app.numPlayersShow = False
+            app.numPlayersConfirmed = False
+
+            app.playerNames = []
+            app.nameIndex = 1
+            app.nameType = False
+            app.name = ''
+            app.nameConfirm = False
+            app.nameConfirmButtonIllum = False
+
+
+            ###########
+            #PROMPT APPS
+            ###########
+            app.writeScreen = True
+            app.typePrompt = False
+            app.prompt = ''
+            app.promptConfirm = False
+            app.promptIllum = False
+            app.promptList = []
+
+            app.mode = 'pen'
+            app.color = 'black'
+            app.size = 'med'
+            app.penColor = 'black'
+            app.penSize = 3
+            app.penQualities = (app.penColor, app.penSize)
+
+            #storing free draw points
+            app.lines = [[]]
+            app.penColorSize = [[]]
+
+            app.eraseCircle = False
+            app.eraseCircleX = None
+            app.eraseCircleY = None
+            
+            #testing
+            app.drawmode = True
+
+            #canvas selecting variables
+            app.blackSelected = True
+            app.redSelected, app.blueSelected, app.greenSelected, app.whiteSelected, app.yellowSelected = False, False, False, False, False
+            app.penModeIllum, app.shapeModeIllum, app.eraseModeIllum, app.trashModeIllum, app.lineModeIllum, app.textModeIllum = False, False, False, False, False, False
+            app.xLargeSelect, app.largeSelect, app.smallSelect = False, False, False
+            app.mediumSelect = True
+            app.penBack = 'mediumPurple'
+            app.lineBack, app.textBack, app.deleteBack, app.shapeBack, app.eraseBack = 'white', 'white', 'white', 'white', 'white'
+
+            #textMode
+            app.text = ''
+            app.textModeType = False
+            app.textX = None
+            app.textY = None
+            app.textPositions = []
+            app.textList = []
+
+            #lineMode
+            app.lineDragMode = False
+            app.dragLinePositions = []
+            app.lineStartX = None
+            app.lineStartY = None
+            app.lineEndX = None
+            app.lineEndY = None
+
+            #shapeMode
+            app.shapeSticker = None
+            app.stickX, app.stickY = None, None
+            app.stickPos = []
+            ###########
+            #GALLERY APPS
+            ###########
+            app.allPlayers = []
+            app.galleryWord = True
+            app.drawFinishOn = False
+
+            setActiveScreen('start')
+
 def drawFinish(app):
     if app.drawFinishOn:
-        drawRect(0, 0, app.width, app.height, fill='white')
-        drawLabel('finish', app.width/2, app.height/2)
+        #background.png generated by ChatGPT
+        bgWidth, bgHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/background.png')
+        drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/background.png', app.width/2, app.height/2, align='center', width=0.8*bgWidth, height=0.8*bgHeight)
+        #drawRect(app.width/2, app.height/2, 500, 600, fill='white', border='darkGray', align='center')
+        #drawRect(0, 0, app.width, app.height, fill='white')
+        drawRect(app.width/2, app.height/2+100, 200, 45, fill=None, border='black', align='center')
+        drawLabel('Return Home', app.width/2, app.height/2+100, size=20, fill='black', font='monospace')
+        #font by 1001 Fonts Fontalicious
+        finishWidth, finishHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/finishNew.png')
+        drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/finishNew.png', app.width/2, app.height/2 - 50, width=finishWidth*0.37, height = finishHeight*0.37, align='center')
+
+def gallery_onMouseMove(app, mouseX, mouseY):
+    if app.drawFinishOn and ((app.width/2 - 100 <= mouseX <= app.width/2 + 100) and 
+        (app.height/2 + 100 - 45/2 <= mouseY <= app.height/2 + 100 + 45/2)):
+        app.drawHomeIllum = True
+    else:
+        app.drawHomeIllum = False
+
+def drawReturnHomeIllum(app):
+    if app.drawHomeIllum:
+        drawRect(app.width/2, app.height/2+100, 200, 45, fill='lavender', border='black', align='center', opacity=70)
 
 
 

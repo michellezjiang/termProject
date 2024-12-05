@@ -42,6 +42,13 @@ def onAppStart(app):
     app.arrowIllumButton = False
     app.resetIllumButton = False
     app.homeIllumButton = False
+    app.drawNextPreview = False
+    app.canMove = False
+    app.galleryWord = True
+    app.drawFinishOn = False
+
+    app.erasedPositions = [[]]
+    app.drawHomeIllum = False
 
 def rules_onResize(app):
     app.logoX = app.width/2
@@ -49,46 +56,49 @@ def rules_onResize(app):
 
 
 def drawRulesBox(app):
+    #font is from 1001 fonts Fontalicious
+    bg1Width, bg1Height = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/background1.jpg')
+    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/background1.jpg', app.width/2, app.height/2, align='center', width=bg1Width*0.85, height=bg1Height*0.85)
     imageWidth, imageHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/rules.png')
     drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/rules.png', app.logoX, app.logoY, width = 0.23*imageWidth, height= 0.23*imageHeight, align='center')
-    drawRect(app.menuX, app.menuY, app.menuWidth, app.menuHeight, align='center', fill=None, border='darkGray')
+    drawRect(app.menuX, app.menuY, app.menuWidth, app.menuHeight, align='center', fill='lavender', border='black', opacity=90)
 
 def drawRule(app):
     if app.drawRule1:
-        drawLabel("1.   The first player begins ", app.width/2, app.height/2-90, size=25)
-        drawLabel("by writing a funny sentence.", app.width/2, app.height/2-45, size=25)
-        drawLabel("Be creative!", app.width/2, app.height/2, size=25)
-        drawLabel("The more unique the sentence,", app.width/2, app.height/2+45, size=25)
-        drawLabel("the better the experience!", app.width/2, app.height/2+90, size=25)
+        drawLabel("1.   The first player begins ", app.width/2, app.height/2-90, size=18, font='monospace')
+        drawLabel("by writing a funny sentence.", app.width/2, app.height/2-45, size=18, font='monospace')
+        drawLabel("Be creative!", app.width/2, app.height/2, size=20, font='monospace')
+        drawLabel("The more unique the sentence,", app.width/2, app.height/2+45, size=18, font='monospace')
+        drawLabel("the better the experience!", app.width/2, app.height/2+90, size=18, font='monospace')
 
     if app.drawRule2:
-        drawLabel("2.   The next player then", app.width/2, app.height/2 - 45, size=25)
-        drawLabel("draws what the previous player", app.width/2, app.height/2, size=25)
-        drawLabel('wrote in 25 seconds.', app.width/2, app.height/2 + 45, size=25)
+        drawLabel("2.   The next player then", app.width/2, app.height/2 - 45, size=18, font='monospace')
+        drawLabel("draws what the previous player", app.width/2, app.height/2, size=18, font='monospace')
+        drawLabel('wrote in 25 seconds.', app.width/2, app.height/2 + 45, size=18, font='monospace')
 
     if app.drawRule3:
-        drawLabel("3.   Then the next player", app.width/2, app.height/2 - 45, size=25)
-        drawLabel("has to guess what the", app.width/2, app.height/2, size=25)
-        drawLabel("previous player drew.", app.width/2, app.height/2 + 45, size=25)
+        drawLabel("3.   Then the next player", app.width/2, app.height/2 - 45, size=18, font='monospace')
+        drawLabel("has to guess what the", app.width/2, app.height/2, size=18, font='monospace')
+        drawLabel("previous player drew.", app.width/2, app.height/2 + 45, size=18, font='monospace')
          
     if app.drawRule4:
-        drawLabel("4.   The game continues until", app.width/2, app.height/2 - 45, size=25)
-        drawLabel("all the players", app.width/2, app.height/2, size=25)
-        drawLabel("either drew or guessed.", app.width/2, app.height/2 + 45, size=25)
+        drawLabel("4.   The game continues until", app.width/2, app.height/2 - 45, size=18, font='monospace')
+        drawLabel("all the players", app.width/2, app.height/2, size=18, font='monospace')
+        drawLabel("either drew or guessed.", app.width/2, app.height/2 + 45, size=18, font='monospace')
 
     if app.drawRule5:
-        drawLabel("5.   Everyone will then get to", app.width/2, app.height/2 - 45, size=25)
-        drawLabel("look at all of the", app.width/2, app.height/2, size=25)
-        drawLabel("fun drawings and guesses!", app.width/2, app.height/2+45, size=25)
+        drawLabel("5.   Everyone will then get to", app.width/2, app.height/2 - 45, size=18, font='monospace')
+        drawLabel("look at all of the", app.width/2, app.height/2, size=18, font='monospace')
+        drawLabel("fun drawings and guesses!", app.width/2, app.height/2+45, size=18, font='monospace')
 
 def drawArrow(app):
     if not app.drawRule5:
-        drawRect(app.menuX + app.menuWidth/2 - 8, app.menuY + app.menuHeight/2 - 8, 45, 45, fill=None, border='darkGray', align = 'right-bottom')
-        drawLabel(">", app.menuX + app.menuWidth/2 - 8 - 45 /2, app.menuY + app.menuHeight/2 - 8 - 45/2, size=30, align='center')
+        drawRect(app.menuX + app.menuWidth/2 - 8, app.menuY + app.menuHeight/2 - 8, 45, 45, fill=None, border='black', align = 'right-bottom')
+        drawLabel(">", app.menuX + app.menuWidth/2 - 8 - 45 /2, app.menuY + app.menuHeight/2 - 8 - 45/2, size=30, align='center', font='monospace')
 
     else:
-        drawRect(app.menuX + app.menuWidth/2 - 8, app.menuY + app.menuHeight/2 - 8, 90, 45, fill=None, border='darkGray', align='right-bottom')
-        drawLabel("Restart", app.menuX + app.menuWidth/2 - 8 - 45, app.menuY + app.menuHeight/2 - 8 - 45/2, size=20, align='center')
+        drawRect(app.menuX + app.menuWidth/2 - 8, app.menuY + app.menuHeight/2 - 8, 90, 45, fill=None, border='black', align='right-bottom')
+        drawLabel("Restart", app.menuX + app.menuWidth/2 - 8 - 45, app.menuY + app.menuHeight/2 - 8 - 45/2, size=20, align='center', font='monospace')
 
 def rules_onMousePress(app, mouseX, mouseY):
     if ((8 <= mouseX <= 89) and (8 <= mouseY <= 8 + 45)):
@@ -147,14 +157,14 @@ def rules_onMouseMove(app, mouseX, mouseY):
 
 def highlightButton(app):
     if app.arrowIllumButton:
-        drawRect(app.menuX + app.menuWidth/2 - 8, app.menuY + app.menuHeight/2 - 8, 45, 45, fill='purple', border='darkGray', align = 'right-bottom', opacity=60)
+        drawRect(app.menuX + app.menuWidth/2 - 8, app.menuY + app.menuHeight/2 - 8, 45, 45, fill='plum', border='black', align = 'right-bottom', opacity=60)
 
     if app.resetIllumButton:
-        drawRect(app.menuX + app.menuWidth/2 - 8, app.menuY + app.menuHeight/2 - 8, 90, 45, fill='purple', border='darkGray', align='right-bottom', opacity=60)
+        drawRect(app.menuX + app.menuWidth/2 - 8, app.menuY + app.menuHeight/2 - 8, 90, 45, fill='plum', border='black', align='right-bottom', opacity=60)
 
     if app.homeIllumButton:
-        drawRect(8, 8, 90, 45, fill='red', border='darkGray', opacity=60)
+        drawRect(8, 8, 90, 45, fill='plum', border='black', opacity=60)
 
 def homeButton(app):
-    drawRect(8, 8, 90, 45, fill=None, border='darkGray')
-    drawLabel('Home', 53, 8 + 45/2, size=25)
+    drawRect(8, 8, 90, 45, fill='black', border='black')
+    drawLabel('Home', 53, 8 + 45/2, size=25, font='monospace')

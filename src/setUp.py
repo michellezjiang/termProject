@@ -60,6 +60,9 @@ def onAppStart(app):
     app.name = ''
     app.nameConfirm = False
     app.nameConfirmButtonIllum = False
+    app.drawHomeIllum = False
+
+
 
 def drawSetUpBox(app):
     drawRect(app.menuX, app.menuY, app.menuWidth, app.menuHeight, align='center', fill=None, border='darkGray')
@@ -68,10 +71,10 @@ def drawSetUpBox(app):
 
 def homeButton(app):
     drawRect(8, 8, 90, 45, fill=None, border='darkGray')
-    drawLabel('Home', 53, 8 + 45/2, size=25)
+    drawLabel('Home', 53, 8 + 45/2, size=20, font='monospace')
 
 def numPlayers(app):
-    drawLabel("Number of Players:", app.menuX - app.menuWidth/2 + 25, app.menuY - app.menuHeight/2 + 70, size = 25, align='left')
+    drawLabel("Number of Players:", app.menuX - app.menuWidth/2 + 25, app.menuY - app.menuHeight/2 + 70, size = 20, align='left', font='monospace')
     drawRect(app.menuX + app.menuWidth/2 - 25, app.menuY - app.menuHeight/2 + 70 + 45/2, 125, 45, fill=None, border='darkGray', align='right-bottom')
     if app.numPlayersConfirmButton:
         drawRect(app.menuX + app.menuWidth/2 - 25, app.menuY - app.menuHeight/2 + 70 + 45/2+ 60, 70, 45, fill=None, border='darkGray', align='right-bottom')
@@ -147,14 +150,14 @@ def setUp_onKeyPress(app, key):
 
 def drawNumPlayers(app):
     if app.numPlayersShow:
-        drawLabel(app.numPlayersStr + '|', app.menuX + app.menuWidth/2 - 25 - 125 + 8, app.menuY - app.menuHeight/2 + 70, size=25, align='left')
+        drawLabel(app.numPlayersStr + '|', app.menuX + app.menuWidth/2 - 25 - 125 + 8, app.menuY - app.menuHeight/2 + 70, size=20, align='left', font='monospace')
 
 def enterNames(app):
     if app.numPlayersConfirmed and app.nameIndex < int(app.numPlayersStr)+1:
-        drawLabel(f'Player {app.nameIndex} Name:', app.menuX - app.menuWidth/2 + 25, app.menuY, size=25, align='left')
+        drawLabel(f'Player {app.nameIndex} Name:', app.menuX - app.menuWidth/2 + 25, app.menuY, size=20, align='left', font='monospace')
         drawRect(app.menuX - app.menuWidth/2 + 25, app.menuY + 50, app.menuWidth - 50,45, fill=None, border='darkGray', align='left')
         if app.nameType:
-            drawLabel(app.name + '|', app.menuX - app.menuWidth/2 + 25 + 8, app.menuY + 50, size=25, align = 'left')
+            drawLabel(app.name + '|', app.menuX - app.menuWidth/2 + 25 + 8, app.menuY + 50, size=20, align = 'left', font='monospace')
 
 def drawButtonLabels(app):
     if app.numPlayersConfirmButton:

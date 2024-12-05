@@ -29,6 +29,7 @@ def onAppStart(app):
     # Testing
     app.drawmode = True
 
+
 def redrawAll(app):
     eraseButton(app)
     drawRect(app.canvasX, app.canvasY, app.canvasWidth, app.canvasHeight, 
@@ -76,24 +77,23 @@ def onMouseDrag(app, mouseX, mouseY):
 
 def eraseLines(app):
     # Check each line segment in every stored line
-    for quality in list(app.coloredLines):  # Use list to avoid modifying while iterating
+    for i in range(len(app.lines)):  # Use list to avoid modifying while iterating
         newLines = []
-        for line in app.coloredLines[quality]:
-            currentLine = []
-            for i in range(len(line) - 1):
-                p1, p2 = line[i], line[i + 1]
-                if not isSegmentIntersectingCircle(app, p1, p2):
-                    currentLine.append(p1)
-                else:
-                    if currentLine:
-                        newLines.append(currentLine)
-                        currentLine = []
+        newCurrentLine = []
+        for i in range(len(app.lines[i]) - 1):
+            p1, p2 = app.lines[i], app.lines[i + 1]
+            if not isSegmentIntersectingCircle(app, p1, p2):
+                    newCurrentLine.append(p1)
+            else:
+                if newCurrentLine:
+                    newLines.append(newCurrentLine)
+                    newCurrentLine = []
             # Add the remaining valid segment
-            if currentLine or (len(line) == 1 and not isPointInCircle(app, line[0])):
-                currentLine.append(line[-1])
-                newLines.append(currentLine)
+            if newCurrentLine or (len(app.lines[i]) == 1 and not isPointInCircle(app, app.lines[0])):
+                newCurrentLine.append(app.lines[-1])
+                newLines.append(newCurrentLine)
         # Update the lines with the new ones
-        app.coloredLines[quality] = [l for l in newLines if len(l) > 1]
+        app.lines[i] = [l for l in newLines if len(l) > 1]
 
 def isPointInCircle(app, point):
     # Check if a point is inside the eraser circle

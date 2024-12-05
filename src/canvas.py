@@ -129,10 +129,24 @@ def onAppStart(app):
     app.shapeSticker = None
     app.stickX, app.stickY = None, None
     app.stickPos = []
+
+
     ###########
     #GALLERY APPS
     ###########
     app.allPlayers = []
+    app.canMove = False
+    app.drawNextPreview = False
+    app.galleryWord = True
+    app.drawFinishOn = False
+
+#####temporary variables
+    app.erasedPositions = [[]]
+    app.drawHomeIllum = False
+
+
+
+
 
 
 def onResize(app):
@@ -166,6 +180,7 @@ def canvas_onMouseRelease(app, mouseX, mouseY):
         app.lineDragMode = False
 
 def drawPopUp(app):
+    #all three images are from Freepik Flaticon
     if app.mode=='shape':
         drawRect(0, 0, app.width, app.height, fill='darkGray', opacity = 70)
         drawRect(app.width/2, app.height/2, 300, 400, fill='white', align='center')
@@ -199,17 +214,23 @@ def canvas_onMouseDrag(app, mouseX, mouseY):
             app.eraseCircle = True
             app.eraseCircleX = mouseX
             app.eraseCircleY = mouseY
-            for quality in app.coloredLines:
-                newPoints = []
-                for point in app.coloredLines[quality]:
-                    distance = ((mouseX - point[0])**2 + (mouseY - point[1])**2)**0.5
-                    if distance > 10:
-                        newPoints.append(point)
-                app.coloredLines[quality] = newPoints
+            app.erasedPositions[-1].append((app.eraseCircleX, app.eraseCircleY))
+            # for quality in app.coloredLines:
+            #     newPoints = []
+            #     for point in app.coloredLines[quality]:
+            #         distance = ((mouseX - point[0])**2 + (mouseY - point[1])**2)**0.5
+            #         if distance > 10:
+            #             newPoints.append(point)
+            #     app.coloredLines[quality] = newPoints
 
     if app.mode == 'line' and app.lineDragMode:
         app.lineEndX = mouseX
         app.lineEndY = mouseY
+
+def drawEraserLines(app):
+    for erasedLine in app.erasedPositions:
+        for i in range(len(erasedLine)-1):
+            drawLine(erasedLine[i][0], erasedLine[i][1], erasedLine[i+1][0], erasedLine[i+1][1], fill='white', lineWidth = app.penSize**2)
 
 def drawLines(app):
     if app.lineDragMode and app.lineStartX != None and app.lineEndX != None:
@@ -218,8 +239,69 @@ def drawLines(app):
         drawLine(app.dragLinePositions[i][0], app.dragLinePositions[i][1], app.dragLinePositions[i][2], app.dragLinePositions[i][3], fill=app.dragLinePositions[i][4], lineWidth=app.dragLinePositions[i][5])
 
 def canvas_onMousePress(app, mouseX, mouseY):
+    if ((app.canvasX - (app.canvasWidth/2) + 500 + 180 - 25 <= mouseX <= app.canvasX - (app.canvasWidth/2) + 500 + 180 + 25)
+        and (app.canvasY + (app.canvasHeight/2) + 110 - 25 <= mouseY <= app.canvasY + (app.canvasHeight/2) + 110 + 25)) and not app.drawNextPreview:
+        newPlayer = Player(app.playerNames[app.nameIndex], None, [app.lines, app.penColorSize, app.dragLinePositions, app.stickPos, app.textList, app.textPositions])
+        app.allPlayers.append(newPlayer)
+        print(app.nameIndex)
+        if app.nameIndex == len(app.playerNames) - 1:
+            setActiveScreen('gallery')
+
+        elif app.nameIndex < len(app.playerNames) - 1:
+            app.drawNextPreview = True
+            app.nameIndex += 1
+            app.mode = 'pen'
+            app.color = 'black'
+            app.size = 'med'
+            app.penColor = 'black'
+            app.penSize = 3
+            app.penQualities = (app.penColor, app.penSize)
+
+            #storing free draw points
+            app.lines = [[]]
+            app.penColorSize = [[]]
+
+            app.eraseCircle = False
+            app.eraseCircleX = None
+            app.eraseCircleY = None
+            
+            #testing
+            app.drawmode = True
+
+            #canvas selecting variables
+            app.blackSelected = True
+            app.redSelected, app.blueSelected, app.greenSelected, app.whiteSelected, app.yellowSelected = False, False, False, False, False
+            app.penModeIllum, app.shapeModeIllum, app.eraseModeIllum, app.trashModeIllum, app.lineModeIllum, app.textModeIllum = False, False, False, False, False, False
+            app.xLargeSelect, app.largeSelect, app.smallSelect = False, False, False
+            app.mediumSelect = True
+            app.penBack = 'mediumPurple'
+            app.lineBack, app.textBack, app.deleteBack, app.shapeBack, app.eraseBack = 'white', 'white', 'white', 'white', 'white'
+
+            #textMode
+            app.text = ''
+            app.textModeType = False
+            app.textX = None
+            app.textY = None
+            app.textPositions = []
+            app.textList = []
+
+            #lineMode
+            app.lineDragMode = False
+            app.dragLinePositions = []
+            app.lineStartX = None
+            app.lineStartY = None
+            app.lineEndX = None
+            app.lineEndY = None
+
+            #shapeMode
+            app.shapeSticker = None
+            app.stickX, app.stickY = None, None
+            app.stickPos = []
+
+            setActiveScreen('preview')
+
     if app.mode == 'shape' and ((mouseX < app.width/2 - 150 or mouseX > app.width/2 + 150)
-        or (mouseY < app.height/2 - 200 or mouseY > app.width/2 + 200)):
+        or (mouseY < app.height/2 - 200 or mouseY > app.width/2 + 200)) and not app.drawNextPreview:
         app.mode = 'pen'
     changeColor(app, mouseX, mouseY)
     changeSize(app, mouseX, mouseY)
@@ -228,20 +310,20 @@ def canvas_onMousePress(app, mouseX, mouseY):
     app.drawmode = True
 
     if app.mode == 'text' and (app.canvasX - app.canvasWidth/2 < mouseX < app.canvasX + app.canvasWidth/2
-        and app.canvasY - app.canvasHeight/2 < mouseY < app.canvasY + app.canvasHeight/2):
+        and app.canvasY - app.canvasHeight/2 < mouseY < app.canvasY + app.canvasHeight/2) and not app.drawNextPreview:
         app.textModeType = True
         app.textX = mouseX
         app.textY = mouseY
 
     if app.mode == 'line' and (app.canvasX - app.canvasWidth/2 < mouseX < app.canvasX + app.canvasWidth/2
-        and app.canvasY - app.canvasHeight/2 < mouseY < app.canvasY + app.canvasHeight/2):
+        and app.canvasY - app.canvasHeight/2 < mouseY < app.canvasY + app.canvasHeight/2) and not app.drawNextPreview:
         app.lineDragMode = True
         app.lineStartX = mouseX
         app.lineStartY = mouseY
 
-    if app.mode == 'shape' and ((app.width/2 - 150<= mouseX <= app.width/2 + 150) and (app.height/2 - 200 <= mouseY <= app.height/2 + 200)):
+    if app.mode == 'shape' and ((app.width/2 - 150<= mouseX <= app.width/2 + 150) and (app.height/2 - 200 <= mouseY <= app.height/2 + 200)) and not app.drawNextPreview:
         if ((app.width/2 - 90<= mouseX <= app.width/2 - 90 + 60)
-            and (app.height/2 - 80<= mouseY <= app.height/2-80+60)):
+            and (app.height/2 - 80<= mouseY <= app.height/2-80+60)) :
             app.shapeSticker = 'sq'
             app.mode = 'shapeDraw'
 
@@ -257,20 +339,13 @@ def canvas_onMousePress(app, mouseX, mouseY):
             app.mode = 'shapeDraw'
 
     if app.mode == 'shapeDraw' and (app.canvasX - app.canvasWidth/2 < mouseX < app.canvasX + app.canvasWidth/2
-        and app.canvasY - app.canvasHeight/2 < mouseY < app.canvasY + app.canvasHeight/2):
+        and app.canvasY - app.canvasHeight/2 < mouseY < app.canvasY + app.canvasHeight/2) and not app.drawNextPreview:
         app.stickX = mouseX
         app.stickY = mouseY
 
 
-    if ((app.canvasX - (app.canvasWidth/2) + 500 + 180 - 25 <= mouseX <= app.canvasX - (app.canvasWidth/2) + 500 + 180 + 25)
-        and (app.canvasY + (app.canvasHeight/2) + 110 - 25 <= mouseY <= app.canvasY + (app.canvasHeight/2) + 110 + 25)):
-        newPlayer = Player(app.playerNames[app.nameIndex], None, [app.lines, app.penColorSize, app.dragLinePositions, app.stickPos, app.textList, app.textPositions])
-        app.allPlayers.append(newPlayer)
-        if app.nameIndex < len(app.playerNames) - 1:
-            app.nameIndex += 1
-            setActiveScreen('prompt')
-        else:
-            setActiveScreen('gallery')
+    
+        
 
 def drawStick(app):
     if app.mode == 'shapeDraw':
@@ -339,6 +414,7 @@ def opacitySlider(app):
     drawCircle(app.canvasX - (app.canvasWidth/2) + (30) + 500, app.canvasY + (app.canvasHeight/2) + 110, 7, fill=None, border='darkGray')
 
 def completeDrawing(app):
+    #icon from Flaticon Freepik
     drawRect(app.canvasX - (app.canvasWidth/2) + 500 + 180, app.canvasY + (app.canvasHeight/2) + 110, 50,50, fill=None, align='center', border='darkGray')
     checkWidth, checkHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/rules.png')
     drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/check.png', app.canvasX - (app.canvasWidth/2) + 500 + 180, app.canvasY + (app.canvasHeight/2) + 110, width=checkWidth*0.015, height=checkWidth*0.015, align='center')
@@ -451,6 +527,7 @@ def changeMode(app, mouseX, mouseY):
         app.textPositions = []
         app.stickPos = []
         app.mode='delete'
+
 
 def otherButtons(app):
     ########
@@ -579,4 +656,4 @@ def distance(x0, y0, x1, y1):
 def drawPromptonCanvas(app):
     drawRect(app.canvasX, app.canvasY - app.canvasHeight/2 - 50, app.canvasWidth, 50, fill="white", align='center', border='darkGray')
     if len(app.promptList) > 0:
-        drawLabel(f'{app.playerNames[app.nameIndex]}, draw: ' + app.promptList[-1], app.canvasX - app.canvasWidth/2 + 18, app.canvasY - app.canvasHeight/2 - 50, size=20, align= 'left')
+        drawLabel(f'{app.playerNames[app.nameIndex]}, draw: ' + app.promptList[-1], app.canvasX - app.canvasWidth/2 + 18, app.canvasY - app.canvasHeight/2 - 50, size=20, align= 'left', font='monospace')
