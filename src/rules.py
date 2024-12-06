@@ -26,7 +26,7 @@ def drawRule(app):
     if app.drawRule2:
         drawLabel("2.   The next player then", app.width/2, app.height/2 - 45, size=18, font='monospace')
         drawLabel("draws what the previous player", app.width/2, app.height/2, size=18, font='monospace')
-        drawLabel('wrote in 25 seconds.', app.width/2, app.height/2 + 45, size=18, font='monospace')
+        drawLabel('wrote.', app.width/2, app.height/2 + 45, size=18, font='monospace')
 
     if app.drawRule3:
         drawLabel("3.   Then the next player", app.width/2, app.height/2 - 45, size=18, font='monospace')

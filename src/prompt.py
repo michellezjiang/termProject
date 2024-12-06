@@ -3,13 +3,12 @@ from storePlayer import *
 import string
 
 def drawWriteScreen(app):
-    #font is from 1001 fonts Fontalicious
-    # bg1Width, bg1Height = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/7035853.jpg')
-    # drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/7035853.jpg', app.width/2, app.height/2, align='center', width=bg1Width*0.45, height=bg1Height*0.45)
     if app.writeScreen:
+        #image is from Freepik
         bg1Width, bg1Height = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/4943857.jpg')
         drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/4943857.jpg', app.width/2, app.height/2, align='center', width=bg1Width*0.45, height=bg1Height*0.45, opacity=60)
         writeWidth, writeHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/write.png')
+        #font is from 1001 fonts Fontalicious
         drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/write.png', app.width/2, app.height/2, align='center', width=writeWidth*0.45, height=writeHeight*0.45)
         drawLabel('click to begin', app.width/2, app.height/2 + 100, align='center', fill='black', font='monospace', size=15, bold=True)
 
@@ -26,22 +25,52 @@ def prompt_onMousePress(app, mouseX, mouseY):
         if app.promptConfirm:
             if ((app.width/2 + (560/2) - 70<= mouseX <= app.width/2 + (560/2)) and 
                 (app.height/2+(45/2) + 68 - 45 <= mouseY <=app.height/2+(45/2) + 68)):
-                if app.nameIndex < len(app.playerNames) - 1:
+                print('hi')
+                if app.gameMode == 'competitive' and app.nameIndex != 0:
+                    if app.nameIndex < len(app.playerNames) - 1:
+                        app.promptList.append(app.prompt)
+                        newPlayer = Player(app.playerNames[app.nameIndex], app.prompt, None)
+                        app.allPlayers.append(newPlayer)
+                        app.nameIndex += 1
+                        app.prompt = ''
+                        app.drawNextPreview = True
+                        setActiveScreen('preview')
+                    else:
+                            newPlayer = Player(app.playerNames[app.nameIndex], app.prompt, None)
+                            app.allPlayers.append(newPlayer)
+                            app.promptList.append(app.prompt)
+                            app.prompt = ''
+                            setActiveScreen('gallery')
+
+                elif app.gameMode == 'competitive' and app.nameIndex == 0:
                     app.promptList.append(app.prompt)
                     newPlayer = Player(app.playerNames[app.nameIndex], app.prompt, None)
                     app.allPlayers.append(newPlayer)
                     app.nameIndex += 1
                     app.prompt = ''
                     setActiveScreen('canvas')
-                else:
-                    newPlayer = Player(app.playerNames[app.nameIndex], app.prompt, None)
-                    app.allPlayers.append(newPlayer)
-                    app.promptList.append(app.prompt)
-                    app.prompt = ''
-                    setActiveScreen('gallery')
+                    
+
+                elif app.gameMode == 'classic':
+                    if app.nameIndex < len(app.playerNames) - 1:
+                        app.promptList.append(app.prompt)
+                        newPlayer = Player(app.playerNames[app.nameIndex], app.prompt, None)
+                        app.allPlayers.append(newPlayer)
+                        app.nameIndex += 1
+                        app.prompt = ''
+                        setActiveScreen('canvas')
+                    else:
+                        newPlayer = Player(app.playerNames[app.nameIndex], app.prompt, None)
+                        app.allPlayers.append(newPlayer)
+                        app.promptList.append(app.prompt)
+                        app.prompt = ''
+                        setActiveScreen('gallery')
+
+
 
 def drawPromptScreen(app):
     if not app.writeScreen:
+        #Image by Freepik
         bg1Width, bg1Height = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/4943857.jpg')
         drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/4943857.jpg', app.width/2, app.height/2, align='center', width=bg1Width*0.45, height=bg1Height*0.45, opacity=60)
         drawRect(app.width/2, app.height/2, 600, 400, fill='darkSeaGreen', border='black', align='center', opacity=60)
@@ -58,9 +87,9 @@ def drawPromptScreen(app):
 
         if app.promptConfirm:
             drawRect(app.width/2 + (560/2), app.height/2+(45/2) + 68, 70, 45, fill='white', align='right-bottom', border='black')
+            #icon from Flaticon Freepik
             checkWidth, checkHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/check.png')
             drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/check.png', app.width/2 + (560/2) - 70/2, app.height/2+(45/2) + 65 - 45/2, width=checkWidth*0.06, height=checkWidth*0.06, align='center')
-            #icon from Flaticon Freepik
 
 def prompt_onKeyPress(app, key):
     if app.typePrompt:

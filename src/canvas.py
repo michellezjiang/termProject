@@ -4,14 +4,17 @@ import string
 
 def drawDrawWord(app):
     if app.drawDrawScreen:
+        #Image from Freepik
         bg1Width, bg1Height = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/4943857.jpg')
         drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/4943857.jpg', app.width/2, app.height/2, align='center', width=bg1Width*0.45, height=bg1Height*0.45, opacity=60)
+        #font from 1001 fonts Fontalicious
         drawWidth, drawHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/draw.png')
         drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/draw.png', app.width/2, app.height/2, align='center', width=0.45*drawWidth, height=0.45*drawHeight)
         drawLabel('press esc for details', app.width/2, app.height/2 + 100, align='center', fill='black', font='monospace', size=15, bold=True)
 
 def drawCanvas(app):
     if not app.drawDrawScreen:
+        #Image from Freepik
         bg1Width, bg1Height = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/4943857.jpg')
         drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/4943857.jpg', app.width/2, app.height/2, align='center', width=bg1Width*0.45, height=bg1Height*0.45, opacity=60)
         drawRect(app.canvasX, app.canvasY, app.canvasWidth, app.canvasHeight, align='center', fill='white', border='darkGray')

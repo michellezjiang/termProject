@@ -53,6 +53,9 @@ def onAppStart(app):
     ##############
     #SETUP APPS
     ##############
+    app.gameMode = None
+    app.namesOn = False
+    app.numPlayersOn = False
     app.numPlayersStr = ''
     app.numPlayersConfirmButton = False
     app.numPlayersConfirmButtonIllum = False
@@ -66,6 +69,7 @@ def onAppStart(app):
     app.name = ''
     app.nameConfirm = False
     app.nameConfirmButtonIllum = False
+    app.classBack, app.compBack = None, None
 
 
     ###########
@@ -148,6 +152,13 @@ def onAppStart(app):
     app.drawHomeIllum = False
     app.drawDrawScreen = True
 
+    app.winner = None
+    app.scoresOn = False
+    app.showWinner = False
+    app.drawHome2Illum = False
+    app.drawReplayIllum = False
+
+
 def start_redrawAll(app):
     drawMenuBox(app)
     drawButtons(app)
@@ -164,6 +175,7 @@ def rules_redrawAll(app):
 def setUp_redrawAll(app):
     drawSetUpBox(app)
     homeButton(app)
+    drawMode(app)
     numPlayers(app)
     drawNumPlayers(app)
     enterNames(app)
@@ -205,6 +217,7 @@ def gallery_redrawAll(app):
     drawEndPromptScreen(app)
     drawDrawingScreen(app)
     drawFinalArrow(app)
+    drawScores(app)
     drawFinish(app)
     drawReturnHomeIllum(app)
 
