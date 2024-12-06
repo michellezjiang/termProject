@@ -65,19 +65,22 @@ def onAppStart(app):
 
 
 def drawSetUpBox(app):
-    drawRect(app.menuX, app.menuY, app.menuWidth, app.menuHeight, align='center', fill=None, border='darkGray')
+    #Image by Freepik (https://www.freepik.com/free-vector/gradient-purple-swirl-background_34709911.htm#fromView=keyword&page=1&position=26&uuid=c5de668e-f514-4325-bada-f9b32c9e8f82)
+    bgWidth, bgHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/8175256.jpg')
+    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/8175256.jpg', app.width/2, app.height/2, align='center', width=0.4*bgWidth, height=0.4*bgHeight)
+    drawRect(app.menuX, app.menuY, app.menuWidth, app.menuHeight, align='center', fill='lavender', border='black', opacity=90)
     imageWidth, imageHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/DrawPhone.png')
-    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/DrawPhone.png', app.logoX, app.logoY, width = 0.25*imageWidth, height= 0.25*imageHeight, align='center')
+    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/DrawPhone.png', app.logoX, app.logoY, width = 0.5*imageWidth, height= 0.5*imageHeight, align='center')
 
 def homeButton(app):
-    drawRect(8, 8, 90, 45, fill=None, border='darkGray')
+    drawRect(8, 8, 90, 45, fill='lavender', border='black', opacity=90)
     drawLabel('Home', 53, 8 + 45/2, size=20, font='monospace')
 
 def numPlayers(app):
     drawLabel("Number of Players:", app.menuX - app.menuWidth/2 + 25, app.menuY - app.menuHeight/2 + 70, size = 20, align='left', font='monospace')
-    drawRect(app.menuX + app.menuWidth/2 - 25, app.menuY - app.menuHeight/2 + 70 + 45/2, 125, 45, fill=None, border='darkGray', align='right-bottom')
+    drawRect(app.menuX + app.menuWidth/2 - 25, app.menuY - app.menuHeight/2 + 70 + 45/2, 125, 45, fill='white', border='darkGray', align='right-bottom')
     if app.numPlayersConfirmButton:
-        drawRect(app.menuX + app.menuWidth/2 - 25, app.menuY - app.menuHeight/2 + 70 + 45/2+ 60, 70, 45, fill=None, border='darkGray', align='right-bottom')
+        drawRect(app.menuX + app.menuWidth/2 - 25, app.menuY - app.menuHeight/2 + 70 + 45/2+ 60, 70, 45, fill=None, border='black', align='right-bottom')
 
 def setUp_onMousePress(app, mouseX, mouseY):
     if ((8 <= mouseX <= 89) and (8 <= mouseY <= 8 + 45)):
@@ -118,7 +121,6 @@ def setUp_onMousePress(app, mouseX, mouseY):
             if app.nameIndex < int(app.numPlayersStr):
                 app.nameIndex += 1
                 app.playerNames.append(app.name)
-                print(app.playerNames)
                 app.name = ''
                 app.nameConfirm = False
                 app.nameConfirmButtonIllum = False
@@ -128,7 +130,7 @@ def setUp_onMousePress(app, mouseX, mouseY):
 
 def drawNameConfirmButton(app):
     if app.nameConfirm:
-        drawRect(app.menuX + app.menuWidth/2 - 25, app.menuY + 50 + 45/2 + 60, 70, 45, align='right-bottom', fill=None, border='darkGray')
+        drawRect(app.menuX + app.menuWidth/2 - 25, app.menuY + 50 + 45/2 + 60, 70, 45, align='right-bottom', fill=None, border='black')
 
 def setUp_onKeyPress(app, key):
     if app.numPlayersType:
@@ -155,17 +157,17 @@ def drawNumPlayers(app):
 def enterNames(app):
     if app.numPlayersConfirmed and app.nameIndex < int(app.numPlayersStr)+1:
         drawLabel(f'Player {app.nameIndex} Name:', app.menuX - app.menuWidth/2 + 25, app.menuY, size=20, align='left', font='monospace')
-        drawRect(app.menuX - app.menuWidth/2 + 25, app.menuY + 50, app.menuWidth - 50,45, fill=None, border='darkGray', align='left')
+        drawRect(app.menuX - app.menuWidth/2 + 25, app.menuY + 50, app.menuWidth - 50,45, fill='white', border='darkGray', align='left')
         if app.nameType:
             drawLabel(app.name + '|', app.menuX - app.menuWidth/2 + 25 + 8, app.menuY + 50, size=20, align = 'left', font='monospace')
 
 def drawButtonLabels(app):
     if app.numPlayersConfirmButton:
-        checkWidth, checkHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/rules.png')
-        drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/check.png', app.menuX + app.menuWidth/2 - 25 - 70/2, app.menuY - app.menuHeight/2 + 70 + 60, width=checkWidth*0.015, height=checkWidth*0.015, align='center')
+        checkWidth, checkHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/check.png')
+        drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/check.png', app.menuX + app.menuWidth/2 - 25 - 70/2, app.menuY - app.menuHeight/2 + 70 + 60, width=checkWidth*0.06, height=checkWidth*0.06, align='center')
 
     if app.nameConfirm:
-        drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/check.png', app.menuX + app.menuWidth/2 - 25 - 70/2, app.menuY + 50 + 45/2 + 60 - 45/2, width=checkWidth*0.015, height=checkWidth*0.015, align='center')
+        drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/check.png', app.menuX + app.menuWidth/2 - 25 - 70/2, app.menuY + 50 + 45/2 + 60 - 45/2, width=checkWidth*0.06, height=checkWidth*0.06, align='center')
 
 def setUp_onMouseMove(app, mouseX, mouseY):
     if (8 <= mouseX <= 89) and (8 <= mouseY <= 8 + 45):
@@ -195,11 +197,11 @@ def setUp_onMouseMove(app, mouseX, mouseY):
 
 def drawButtonIlluminations(app):
     if app.homeIllumButton:
-        drawRect(8, 8, 90, 45, fill='red', border='darkGray', opacity=60)
+        drawRect(8, 8, 90, 45, fill='mediumPurple', border='black', opacity=60)
     if app.numPlayersConfirmButtonIllum:
-        drawRect(app.menuX + app.menuWidth/2 - 25, app.menuY - app.menuHeight/2 + 70 + 45/2+ 60, 70, 45, fill='purple', opacity=60,border='darkGray', align='right-bottom')
+        drawRect(app.menuX + app.menuWidth/2 - 25, app.menuY - app.menuHeight/2 + 70 + 45/2+ 60, 70, 45, fill='mediumPurple', opacity=60,border='black', align='right-bottom')
     if app.nameConfirmButtonIllum:
-        drawRect(app.menuX + app.menuWidth/2 - 25, app.menuY + 50 + 45/2 + 60, 70, 45, align='right-bottom', fill='purple', border='darkGray', opacity = 60)
+        drawRect(app.menuX + app.menuWidth/2 - 25, app.menuY + 50 + 45/2 + 60, 70, 45, align='right-bottom', fill='mediumPurple', border='black', opacity = 60)
 
 
     

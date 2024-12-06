@@ -106,8 +106,9 @@ def onAppStart(app):
     app.penModeIllum, app.shapeModeIllum, app.eraseModeIllum, app.trashModeIllum, app.lineModeIllum, app.textModeIllum = False, False, False, False, False, False
     app.xLargeSelect, app.largeSelect, app.smallSelect = False, False, False
     app.mediumSelect = True
-    app.penBack = 'mediumPurple'
+    app.penBack = 'plum'
     app.lineBack, app.textBack, app.deleteBack, app.shapeBack, app.eraseBack = 'white', 'white', 'white', 'white', 'white'
+    app.checkIllum = False
 
     #textMode
     app.text = ''
@@ -145,7 +146,13 @@ def onAppStart(app):
     app.drawHomeIllum = False
 
 
-
+def drawCanvas(app):
+    bg1Width, bg1Height = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/7035853.jpg')
+    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/7035853.jpg', app.width/2, app.height/2, align='center', width=bg1Width*0.45, height=bg1Height*0.45)
+    drawRect(app.canvasX, app.canvasY, app.canvasWidth, app.canvasHeight, align='center', fill='white', border='darkGray')
+    for i in range(len(app.lines)):
+        for j in range(len(app.lines[i])-1):
+            drawLine(app.lines[i][j][0], app.lines[i][j][1], app.lines[i][j+1][0], app.lines[i][j+1][1], fill=app.penColorSize[i][0][0], lineWidth=app.penColorSize[i][0][1])
 
 
 
@@ -172,7 +179,8 @@ def canvas_onMouseRelease(app, mouseX, mouseY):
         app.deleteBack = 'white'
     if app.mode == 'line' and (app.canvasX - app.canvasWidth/2 < mouseX < app.canvasX + app.canvasWidth/2
         and app.canvasY - app.canvasHeight/2 < mouseY < app.canvasY + app.canvasHeight/2):
-        app.dragLinePositions.append([app.lineStartX, app.lineStartY, app.lineEndX, app.lineEndY, app.penColor, app.penSize])
+        if app.lineEndX != None:
+            app.dragLinePositions.append([app.lineStartX, app.lineStartY, app.lineEndX, app.lineEndY, app.penColor, app.penSize])
         app.lineStartX = None
         app.lineStartY = None
         app.lineEndX = None
@@ -182,14 +190,14 @@ def canvas_onMouseRelease(app, mouseX, mouseY):
 def drawPopUp(app):
     #all three images are from Freepik Flaticon
     if app.mode=='shape':
-        drawRect(0, 0, app.width, app.height, fill='darkGray', opacity = 70)
+        drawRect(0, 0, app.width, app.height, fill='black', opacity = 70)
         drawRect(app.width/2, app.height/2, 300, 400, fill='white', align='center')
-        drawRect(app.width/2 - 90, app.height/2 - 80, 60, 60, fill='white', border='darkGray')
+        drawRect(app.width/2 - 90, app.height/2 - 80, 60, 60, fill='white', border='black')
         squareWidth, squareHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/black-square.png')
         drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/black-square.png', app.width/2 - 90 + 30, app.height/2 - 80 + 30, width=squareWidth*0.07, height=squareHeight*0.07, align='center')
-        drawRect(app.width/2 + 30, app.height/2 - 80, 60, 60, fill='white', border='darkGray')
+        drawRect(app.width/2 + 30, app.height/2 - 80, 60, 60, fill='white', border='black')
         drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/new-moon.png', app.width/2 + 60, app.height/2 - 80 + 30, width=squareWidth*0.07, height=squareHeight*0.07, align='center')
-        drawRect(app.width/2 - 30, app.height/2 + 20, 60, 60, fill='white', border='darkGray')
+        drawRect(app.width/2 - 30, app.height/2 + 20, 60, 60, fill='white', border='black')
         drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/star.png', app.width/2, app.height/2 + 50, width=squareWidth*0.07, height=squareHeight*0.07, align='center')
         
                 
@@ -227,14 +235,10 @@ def canvas_onMouseDrag(app, mouseX, mouseY):
         app.lineEndX = mouseX
         app.lineEndY = mouseY
 
-def drawEraserLines(app):
-    for erasedLine in app.erasedPositions:
-        for i in range(len(erasedLine)-1):
-            drawLine(erasedLine[i][0], erasedLine[i][1], erasedLine[i+1][0], erasedLine[i+1][1], fill='white', lineWidth = app.penSize**2)
-
 def drawLines(app):
     if app.lineDragMode and app.lineStartX != None and app.lineEndX != None:
         drawLine(app.lineStartX, app.lineStartY, app.lineEndX, app.lineEndY, fill=app.penColor, lineWidth=app.penSize)
+
     for i in range(len(app.dragLinePositions)):
         drawLine(app.dragLinePositions[i][0], app.dragLinePositions[i][1], app.dragLinePositions[i][2], app.dragLinePositions[i][3], fill=app.dragLinePositions[i][4], lineWidth=app.dragLinePositions[i][5])
 
@@ -243,7 +247,6 @@ def canvas_onMousePress(app, mouseX, mouseY):
         and (app.canvasY + (app.canvasHeight/2) + 110 - 25 <= mouseY <= app.canvasY + (app.canvasHeight/2) + 110 + 25)) and not app.drawNextPreview:
         newPlayer = Player(app.playerNames[app.nameIndex], None, [app.lines, app.penColorSize, app.dragLinePositions, app.stickPos, app.textList, app.textPositions])
         app.allPlayers.append(newPlayer)
-        print(app.nameIndex)
         if app.nameIndex == len(app.playerNames) - 1:
             setActiveScreen('gallery')
 
@@ -364,7 +367,7 @@ def drawStick(app):
         elif app.stickPos[i][0] == 'cir':
             drawCircle(app.stickPos[i][1], app.stickPos[i][2], app.stickPos[i][3], fill=app.stickPos[i][4])
         elif app.stickPos[i][0] == 'star':
-            drawStar(app.stickPos[i][1], app.stickPos[i][2], app.stickPos[i][3], 5)
+            drawStar(app.stickPos[i][1], app.stickPos[i][2], app.stickPos[i][3], 5, fill=app.stickPos[i][4])
 
     
 
@@ -406,7 +409,7 @@ def colorButtons(app):
     drawCircle(app.canvasX - (app.canvasWidth/2) + 30, app.canvasY + (app.canvasHeight/2) + 110, 25, fill='green')
     drawCircle(app.canvasX - (app.canvasWidth/2) + 30 + 75, app.canvasY + (app.canvasHeight/2) + 110, 25, fill='white')
     drawCircle(app.canvasX - (app.canvasWidth/2) + (30) + 150, app.canvasY + (app.canvasHeight/2) + 110, 25, fill='black')
-    drawLine(app.canvasX - (app.canvasWidth/2) + (30) + 200, app.canvasY + (app.canvasHeight/2) + 10, app.canvasX - (app.canvasWidth/2) + (30) + 200, app.canvasY + (app.canvasHeight/2) + 135, fill='darkGray')
+    drawLine(app.canvasX - (app.canvasWidth/2) + (30) + 200, app.canvasY + (app.canvasHeight/2) + 10, app.canvasX - (app.canvasWidth/2) + (30) + 200, app.canvasY + (app.canvasHeight/2) + 135, fill='black')
 
 def opacitySlider(app):
     drawLine(app.canvasX - (app.canvasWidth/2) + (30) + 505, app.canvasY + (app.canvasHeight/2) + 110, app.canvasX - (app.canvasWidth/2) + 500 + 180 - 25 - 25, app.canvasY + (app.canvasHeight/2) + 110, fill='darkGray')
@@ -415,9 +418,9 @@ def opacitySlider(app):
 
 def completeDrawing(app):
     #icon from Flaticon Freepik
-    drawRect(app.canvasX - (app.canvasWidth/2) + 500 + 180, app.canvasY + (app.canvasHeight/2) + 110, 50,50, fill=None, align='center', border='darkGray')
-    checkWidth, checkHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/rules.png')
-    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/check.png', app.canvasX - (app.canvasWidth/2) + 500 + 180, app.canvasY + (app.canvasHeight/2) + 110, width=checkWidth*0.015, height=checkWidth*0.015, align='center')
+    drawRect(app.canvasX - (app.canvasWidth/2) + 500 + 180, app.canvasY + (app.canvasHeight/2) + 110, 50,50, fill=None, align='center', border='black')
+    checkWidth, checkHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/check.png')
+    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/check.png', app.canvasX - (app.canvasWidth/2) + 500 + 180, app.canvasY + (app.canvasHeight/2) + 110, width=checkWidth*0.06, height=checkWidth*0.06, align='center')
 
 def changeColor(app, mouseX, mouseY):
     if distance(mouseX, mouseY, app.canvasX - (app.canvasWidth/2) + 30, app.canvasY + (app.canvasHeight/2) + 35) <= 25:
@@ -461,13 +464,13 @@ def sizeButtons(app):
 
 def selectSize(app):
     if app.smallSelect:
-        drawCircle(app.canvasX - (app.canvasWidth/2) + (30) + 500, app.canvasY + (app.canvasHeight/2) + 35, 13, fill=None, border='darkGray')
+        drawCircle(app.canvasX - (app.canvasWidth/2) + (30) + 500, app.canvasY + (app.canvasHeight/2) + 35, 13, fill=None, border='black')
     if app.mediumSelect:
-        drawCircle(app.canvasX - (app.canvasWidth/2) + 500 + 80, app.canvasY + (app.canvasHeight/2) + 35, 17, border='darkGray', fill=None)
+        drawCircle(app.canvasX - (app.canvasWidth/2) + 500 + 80, app.canvasY + (app.canvasHeight/2) + 35, 17, border='black', fill=None)
     if app.largeSelect:
-        drawCircle(app.canvasX - (app.canvasWidth/2) + 500 + 130, app.canvasY + (app.canvasHeight/2) + 35, 20, border='darkGray', fill=None)
+        drawCircle(app.canvasX - (app.canvasWidth/2) + 500 + 130, app.canvasY + (app.canvasHeight/2) + 35, 20, border='black', fill=None)
     if app.xLargeSelect:
-        drawCircle(app.canvasX - (app.canvasWidth/2) + 500 + 180, app.canvasY + (app.canvasHeight/2) + 35, 23, border='darkGray', fill=None)
+        drawCircle(app.canvasX - (app.canvasWidth/2) + 500 + 180, app.canvasY + (app.canvasHeight/2) + 35, 23, border='black', fill=None)
 
 def changeSize(app, mouseX, mouseY):
     if app.mode == 'pen' or app.mode=='text' or app.mode=='line' or app.mode=='shapeDraw':
@@ -534,30 +537,30 @@ def otherButtons(app):
     #All icons from Flaticon Pixel Perfect and Freepik
     ########
     #pen
-    drawRect(app.canvasX - (app.canvasWidth/2) + (30) + 250,app.canvasY + (app.canvasHeight/2) + 35,50,50, fill=app.penBack, align='center', border='darkGray')
+    drawRect(app.canvasX - (app.canvasWidth/2) + (30) + 250,app.canvasY + (app.canvasHeight/2) + 35,50,50, fill=app.penBack, align='center', border='black')
     pencilWidth, pencilHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/pencil.png')
     drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/pencil.png', app.canvasX - (app.canvasWidth/2) + (30) + 250, app.canvasY + (app.canvasHeight/2) + 35, width=pencilWidth*0.06, height=pencilHeight*0.06, align='center')
     #eraser
-    drawRect(app.canvasX - (app.canvasWidth/2) + (30) + 250,app.canvasY + (app.canvasHeight/2) + 110,50,50, fill=app.eraseBack, align='center', border='darkGray')
+    drawRect(app.canvasX - (app.canvasWidth/2) + (30) + 250,app.canvasY + (app.canvasHeight/2) + 110,50,50, fill=app.eraseBack, align='center', border='black')
     eraserHeight, eraserWidth = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/eraser.png')
     drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/eraser.png', app.canvasX - (app.canvasWidth/2) + (30) + 250, app.canvasY + (app.canvasHeight/2) + 110, width=eraserWidth*0.06, height=eraserHeight*0.06, align='center')
     #shapes
-    drawRect(app.canvasX - (app.canvasWidth/2) + (30) + 325,app.canvasY + (app.canvasHeight/2) + 35,50,50, fill=app.shapeBack, align='center', border='darkGray')
+    drawRect(app.canvasX - (app.canvasWidth/2) + (30) + 325,app.canvasY + (app.canvasHeight/2) + 35,50,50, fill=app.shapeBack, align='center', border='black')
     shapeHeight, shapeWidth = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/shape.png')
     drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/shape.png', app.canvasX - (app.canvasWidth/2) + (30) + 325,app.canvasY + (app.canvasHeight/2) + 35, width=shapeWidth*0.06, height=shapeHeight*0.06, align='center')
     #line
-    drawRect(app.canvasX - (app.canvasWidth/2) + (30) + 325, app.canvasY + (app.canvasHeight/2) + 110,50,50, fill=app.lineBack, align='center', border='darkGray')
+    drawRect(app.canvasX - (app.canvasWidth/2) + (30) + 325, app.canvasY + (app.canvasHeight/2) + 110,50,50, fill=app.lineBack, align='center', border='black')
     lineHeight, lineWidth = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/line-segment.png')
     drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/line-segment.png', app.canvasX - (app.canvasWidth/2) + (30) + 325, app.canvasY + (app.canvasHeight/2) + 110, width=lineWidth*0.06, height=lineHeight*0.06, align='center')
     #text
-    drawRect(app.canvasX - (app.canvasWidth/2) + (30) + 400, app.canvasY + (app.canvasHeight/2) + 35,50,50, fill=app.textBack, align='center', border='darkGray')
+    drawRect(app.canvasX - (app.canvasWidth/2) + (30) + 400, app.canvasY + (app.canvasHeight/2) + 35,50,50, fill=app.textBack, align='center', border='black')
     textHeight, textWidth = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/type-removebg-preview.png')
     drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/type-removebg-preview.png', app.canvasX - (app.canvasWidth/2) + (30) + 400, app.canvasY + (app.canvasHeight/2) + 35, width=textWidth*0.06, height=textHeight*0.06, align='center')
     #delete
-    drawRect(app.canvasX - (app.canvasWidth/2) + (30) + 400, app.canvasY + (app.canvasHeight/2) + 110,50,50, fill=app.deleteBack, align='center', border='darkGray')
+    drawRect(app.canvasX - (app.canvasWidth/2) + (30) + 400, app.canvasY + (app.canvasHeight/2) + 110,50,50, fill=app.deleteBack, align='center', border='black')
     deleteHeight, deleteWidth = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/bin.png')
     drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/bin.png', app.canvasX - (app.canvasWidth/2) + (30) + 400, app.canvasY + (app.canvasHeight/2) + 110, width=textWidth*0.06, height=textHeight*0.06, align='center')
-    drawLine(app.canvasX - (app.canvasWidth/2) + (30) + 450, app.canvasY + (app.canvasHeight/2) + 10, app.canvasX - (app.canvasWidth/2) + (30) + 450, app.canvasY + (app.canvasHeight/2) + 135, fill='darkGray')
+    drawLine(app.canvasX - (app.canvasWidth/2) + (30) + 450, app.canvasY + (app.canvasHeight/2) + 10, app.canvasX - (app.canvasWidth/2) + (30) + 450, app.canvasY + (app.canvasHeight/2) + 135, fill='black')
 
 def buttonBack(app):
     if app.mode=='pen':
@@ -592,17 +595,17 @@ def buttonBack(app):
         
 def selectColor(app):
     if app.blackSelected:
-        drawCircle(app.canvasX - (app.canvasWidth/2) + (30) + 150, app.canvasY + (app.canvasHeight/2) + 110, 30, fill=None, border='darkGray')
+        drawCircle(app.canvasX - (app.canvasWidth/2) + (30) + 150, app.canvasY + (app.canvasHeight/2) + 110, 30, fill=None, border='black')
     elif app.yellowSelected:
-        drawCircle(app.canvasX - (app.canvasWidth/2) + 30 + 75, app.canvasY + (app.canvasHeight/2) + 35, 30, fill=None, border='darkGray')
+        drawCircle(app.canvasX - (app.canvasWidth/2) + 30 + 75, app.canvasY + (app.canvasHeight/2) + 35, 30, fill=None, border='black')
     elif app.redSelected:
-        drawCircle(app.canvasX - (app.canvasWidth/2) + 30, app.canvasY + (app.canvasHeight/2) + 35, 30, fill=None, border='darkGray')
+        drawCircle(app.canvasX - (app.canvasWidth/2) + 30, app.canvasY + (app.canvasHeight/2) + 35, 30, fill=None, border='black')
     elif app.blueSelected:
-        drawCircle(app.canvasX - (app.canvasWidth/2) + (30) + 150, app.canvasY + (app.canvasHeight/2) + 35, 30, fill=None, border='darkGray')
+        drawCircle(app.canvasX - (app.canvasWidth/2) + (30) + 150, app.canvasY + (app.canvasHeight/2) + 35, 30, fill=None, border='black')
     elif app.greenSelected:
-        drawCircle(app.canvasX - (app.canvasWidth/2) + 30, app.canvasY + (app.canvasHeight/2) + 110, 30, fill=None, border='darkGray')
+        drawCircle(app.canvasX - (app.canvasWidth/2) + 30, app.canvasY + (app.canvasHeight/2) + 110, 30, fill=None, border='black')
     elif app.whiteSelected:
-        drawCircle(app.canvasX - (app.canvasWidth/2) + 30 + 75, app.canvasY + (app.canvasHeight/2) + 110, 30, fill=None, border='darkGray')
+        drawCircle(app.canvasX - (app.canvasWidth/2) + 30 + 75, app.canvasY + (app.canvasHeight/2) + 110, 30, fill=None, border='black')
 
 def canvas_onMouseMove(app, mouseX, mouseY):
     if ((app.canvasX - (app.canvasWidth/2) + (30) + 250 - 25 <= mouseX <= app.canvasX - (app.canvasWidth/2) + (30) + 250 + 25) and 
@@ -635,6 +638,11 @@ def canvas_onMouseMove(app, mouseX, mouseY):
         app.trashModeIllum = True
     else:
         app.trashModeIllum = False
+    if ((app.canvasX - (app.canvasWidth/2) + 500 + 180 - 25 <= mouseX <= app.canvasX - (app.canvasWidth/2) + 500 + 180 + 25) and 
+        (app.canvasY + (app.canvasHeight/2) + 110 - 25 <= mouseY <= app.canvasY + (app.canvasHeight/2) + 110 + 25)):
+        app.checkIllum = True
+    else:
+        app.checkIllum = False
 
 def illumModes(app):
     if app.penModeIllum:

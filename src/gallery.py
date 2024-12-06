@@ -149,6 +149,8 @@ def drawGalleryWord(app):
 def drawEndPromptScreen(app):
     if not app.galleryWord:
         if app.allPlayers[app.nameIndex].prompt != None:
+            bg1Width, bg1Height = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/7035853.jpg')
+            drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/7035853.jpg', app.width/2, app.height/2, align='center', width=bg1Width*0.45, height=bg1Height*0.45)
             drawRect(app.width/2, app.height/2, 600, 400, fill='white', border='darkGray', align='center')
             if app.nameIndex == 0:
                 drawLabel(f'{app.allPlayers[app.nameIndex].name} decided on the prompt: ', app.width/2 - 300 + 18, app.height/2 - 200 + 18, size=20, align='left-top', font='monospace')
@@ -178,7 +180,7 @@ def drawFinalStick(app):
             elif app.allPlayers[app.nameIndex].drawing[3][i][0] == 'cir':
                 drawCircle(app.allPlayers[app.nameIndex].drawing[3][i][1], app.allPlayers[app.nameIndex].drawing[3][i][2], app.allPlayers[app.nameIndex].drawing[3][i][3], fill=app.allPlayers[app.nameIndex].drawing[3][i][4])
             elif app.allPlayers[app.nameIndex].drawing[3][i][0] == 'star':
-                drawStar(app.allPlayers[app.nameIndex].drawing[3][i][1], app.allPlayers[app.nameIndex].drawing[3][i][2], app.allPlayers[app.nameIndex].drawing[3][i][3], 5)
+                drawStar(app.allPlayers[app.nameIndex].drawing[3][i][1], app.allPlayers[app.nameIndex].drawing[3][i][2], app.allPlayers[app.nameIndex].drawing[3][i][3], 5, fill=app.allPlayers[app.nameIndex].drawing[3][i][4])
 
 def drawFinalText(app):
     if not app.galleryWord:
@@ -188,6 +190,8 @@ def drawFinalText(app):
 def drawDrawingScreen(app):
     if not app.galleryWord:
         if app.allPlayers[app.nameIndex].drawing != None:
+            bg1Width, bg1Height = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/7035853.jpg')
+            drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/7035853.jpg', app.width/2, app.height/2, align='center', width=bg1Width*0.45, height=bg1Height*0.45)
             drawRect(app.canvasX, app.canvasY, app.canvasWidth, app.canvasHeight, align='center', fill='white', border='darkGray')
             drawRect(app.canvasX, app.canvasY - app.canvasHeight/2 - 50, app.canvasWidth, 50, fill="white", align='center', border='darkGray')
             drawLabel(f'{app.allPlayers[app.nameIndex].name} drew:', app.canvasX - app.canvasWidth/2 + 18, app.canvasY - app.canvasHeight/2 - 50, size=20, align= 'left', font='monospace')

@@ -16,8 +16,9 @@ def rules_redrawAll(app):
     drawRulesBox(app)
     drawRule(app)
     drawArrow(app)
+    homeButton1(app)
     highlightButton(app)
-    homeButton(app)
+
 
 def setUp_redrawAll(app):
     drawSetUpBox(app)
@@ -37,13 +38,10 @@ def prompt_redrawAll(app):
 
 
 def canvas_redrawAll(app):
+    drawCanvas(app)
     colorButtons(app)
     sizeButtons(app)
     otherButtons(app)
-    drawRect(app.canvasX, app.canvasY, app.canvasWidth, app.canvasHeight, align='center', fill='white', border='darkGray')
-    for i in range(len(app.lines)):
-        for j in range(len(app.lines[i])-1):
-            drawLine(app.lines[i][j][0], app.lines[i][j][1], app.lines[i][j+1][0], app.lines[i][j+1][1], fill=app.penColorSize[i][0][0], lineWidth=app.penColorSize[i][0][1])
     completeDrawing(app)
     opacitySlider(app)
     selectColor(app)

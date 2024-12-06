@@ -50,10 +50,11 @@ def onResize(app):
 
 
 def drawMenuBox(app):
-    #font is from 1001 fonts Fontalicious
-    bg1Width, bg1Height = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/background1.jpg')
-    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/background1.jpg', app.width/2, app.height/2, align='center', width=bg1Width*0.85, height=bg1Height*0.85)
+    #Image by Freepik (https://www.freepik.com/free-vector/gradient-purple-swirl-background_34709911.htm#fromView=keyword&page=1&position=26&uuid=c5de668e-f514-4325-bada-f9b32c9e8f82)
+    bgWidth, bgHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/8175256.jpg')
+    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/8175256.jpg', app.width/2, app.height/2, align='center', width=0.4*bgWidth, height=0.4*bgHeight)
     drawRect(app.menuX, app.menuY, app.menuWidth, app.menuHeight, align='center', fill='lavender', border='black', opacity=90)
+    #font is from 1001 fonts Fontalicious
     imageWidth, imageHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/drawphone.png')
     drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/drawphone.png', app.logoX, app.logoY, width = 0.5*imageWidth, height= 0.5*imageHeight, align='center')
 
@@ -65,10 +66,10 @@ def drawButtons(app):
 
 def drawIllumButtons(app):
     if app.illumStartButton:
-        drawRect(app.newGameX, app.newGameY, app.startButtonWidth, app.startButtonHeight, fill='plum', border = 'darkGray', align='center', opacity=60)
+        drawRect(app.newGameX, app.newGameY, app.startButtonWidth, app.startButtonHeight, fill='mediumPurple', border = 'darkGray', align='center', opacity=60)
 
     if app.illumRulesButton:
-        drawRect(app.rulesX, app.rulesY, app.startButtonWidth, app.startButtonHeight, fill='plum', border = 'darkGray', align='center', opacity=60)
+        drawRect(app.rulesX, app.rulesY, app.startButtonWidth, app.startButtonHeight, fill='mediumPurple', border = 'darkGray', align='center', opacity=60)
 
 def start_onMouseMove(app, mouseX, mouseY):
     if ((app.newGameX - app.startButtonWidth/2 <= mouseX <= app.newGameX + app.startButtonWidth/2) and 

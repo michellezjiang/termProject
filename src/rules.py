@@ -52,15 +52,16 @@ def onAppStart(app):
 
 def rules_onResize(app):
     app.logoX = app.width/2
-    app.logoY = app.menuY - app.menuHeight/2 - 75
+    app.logoY = app.menuY - app.menuHeight/2 - 50
 
 
 def drawRulesBox(app):
+    #Image by Freepik (https://www.freepik.com/free-vector/gradient-purple-swirl-background_34709911.htm#fromView=keyword&page=1&position=26&uuid=c5de668e-f514-4325-bada-f9b32c9e8f82)
+    bgWidth, bgHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/8175256.jpg')
+    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/8175256.jpg', app.width/2, app.height/2, align='center', width=0.4*bgWidth, height=0.4*bgHeight)
     #font is from 1001 fonts Fontalicious
-    bg1Width, bg1Height = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/background1.jpg')
-    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/background1.jpg', app.width/2, app.height/2, align='center', width=bg1Width*0.85, height=bg1Height*0.85)
     imageWidth, imageHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/rules.png')
-    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/rules.png', app.logoX, app.logoY, width = 0.23*imageWidth, height= 0.23*imageHeight, align='center')
+    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/rules.png', app.logoX, app.logoY + 10, width = 0.5*imageWidth, height= 0.5*imageHeight, align='center')
     drawRect(app.menuX, app.menuY, app.menuWidth, app.menuHeight, align='center', fill='lavender', border='black', opacity=90)
 
 def drawRule(app):
@@ -157,14 +158,14 @@ def rules_onMouseMove(app, mouseX, mouseY):
 
 def highlightButton(app):
     if app.arrowIllumButton:
-        drawRect(app.menuX + app.menuWidth/2 - 8, app.menuY + app.menuHeight/2 - 8, 45, 45, fill='plum', border='black', align = 'right-bottom', opacity=60)
+        drawRect(app.menuX + app.menuWidth/2 - 8, app.menuY + app.menuHeight/2 - 8, 45, 45, fill='mediumPurple', border='black', align = 'right-bottom', opacity=60)
 
     if app.resetIllumButton:
-        drawRect(app.menuX + app.menuWidth/2 - 8, app.menuY + app.menuHeight/2 - 8, 90, 45, fill='plum', border='black', align='right-bottom', opacity=60)
+        drawRect(app.menuX + app.menuWidth/2 - 8, app.menuY + app.menuHeight/2 - 8, 90, 45, fill='mediumPurple', border='black', align='right-bottom', opacity=60)
 
     if app.homeIllumButton:
-        drawRect(8, 8, 90, 45, fill='plum', border='black', opacity=60)
+        drawRect(8, 8, 90, 45, fill='mediumPurple', border='black', opacity=60)
 
-def homeButton(app):
-    drawRect(8, 8, 90, 45, fill='black', border='black')
+def homeButton1(app):
+    drawRect(8, 8, 90, 45, fill='lavender', border='black', opacity=90)
     drawLabel('Home', 53, 8 + 45/2, size=25, font='monospace')

@@ -175,7 +175,7 @@ def drawPreviewStick(app):
         elif app.allPlayers[-1].drawing[3][i][0] == 'cir':
             drawCircle(app.allPlayers[-1].drawing[3][i][1], app.allPlayers[-1].drawing[3][i][2], app.allPlayers[-1].drawing[3][i][3], fill=app.allPlayers[-1].drawing[3][i][4])
         elif app.allPlayers[-1].drawing[3][i][0] == 'star':
-            drawStar(app.allPlayers[-1].drawing[3][i][1], app.allPlayers[-1].drawing[3][i][2], app.allPlayers[-1].drawing[3][i][3], 5)
+            drawStar(app.allPlayers[-1].drawing[3][i][1], app.allPlayers[-1].drawing[3][i][2], app.allPlayers[-1].drawing[3][i][3], 5, fill=app.allPlayers[-1].drawing[3][i][4])
 
 def drawPreviewText(app):
     for i in range(len(app.allPlayers[-1].drawing[4])):
