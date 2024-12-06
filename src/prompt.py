@@ -2,96 +2,13 @@ from cmu_graphics import *
 from storePlayer import *
 import string
 
-def onAppStart(app):
-    ##############
-    #START PAGE APPS
-    ##############
-    #menu dimensions
-    app.height = 800
-    app.width = 800
-    app.menuX = app.width/2
-    app.menuY = app.height/2
-    app.menuWidth = 400
-    app.menuHeight = 500
-
-    #logo
-    app.logoX = app.width/2
-    app.logoY = app.menuY - app.menuHeight/2 - 75
-
-    #startButtons
-    app.newGameX = app.width/2
-    app.newGameY = app.height/2 - 100
-    
-    app.rulesX = app.width/2
-    app.rulesY = app.height/2 + 100
-
-    app.startButtonWidth = 300
-    app.startButtonHeight = 50
-
-    app.illumStartButton = False
-    app.illumRulesButton = False
-
-    ##############
-    #RULES APP
-    ##############
-    #use same dimensions as menu
-    app.drawRule1 = True
-    app.drawRule2 = False
-    app.drawRule3 = False
-    app.drawRule4 = False
-    app.drawRule5 = False
-
-    app.arrowIllumButton = False
-    app.resetIllumButton = False
-    app.homeIllumButton = False
-
-    ##############
-    #SETUP APPS
-    ##############
-    app.numPlayersStr = ''
-    app.numPlayersConfirmButton = False
-    app.numPlayersConfirmButtonIllum = False
-    app.numPlayersType = False
-    app.numPlayersShow = False
-    app.numPlayersConfirmed = False
-
-    app.playerNames = []
-    app.nameIndex = 1
-    app.nameType = False
-    app.name = ''
-    app.nameConfirm = False
-    app.nameConfirmButtonIllum = False
-
-
-    ###########
-    #PROMPT APPS
-    ###########
-    app.writeScreen = True
-    app.typePrompt = False
-    app.prompt = ''
-    app.promptConfirm = False
-    app.promptIllum = False
-    app.promptList = []
-
-    ###########
-    #GALLERY APPS
-    ###########
-    app.allPlayers = []
-    app.drawNextPreview = False
-    app.canMove = False
-    app.galleryWord = True
-    app.drawFinishOn = False
-
-    app.erasedPositions = [[]]
-    app.drawHomeIllum = False
-
-
-
 def drawWriteScreen(app):
     #font is from 1001 fonts Fontalicious
-    bg1Width, bg1Height = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/7035853.jpg')
-    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/7035853.jpg', app.width/2, app.height/2, align='center', width=bg1Width*0.45, height=bg1Height*0.45)
+    # bg1Width, bg1Height = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/7035853.jpg')
+    # drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/7035853.jpg', app.width/2, app.height/2, align='center', width=bg1Width*0.45, height=bg1Height*0.45)
     if app.writeScreen:
+        bg1Width, bg1Height = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/4943857.jpg')
+        drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/4943857.jpg', app.width/2, app.height/2, align='center', width=bg1Width*0.45, height=bg1Height*0.45, opacity=60)
         writeWidth, writeHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/write.png')
         drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/write.png', app.width/2, app.height/2, align='center', width=writeWidth*0.45, height=writeHeight*0.45)
         drawLabel('click to begin', app.width/2, app.height/2 + 100, align='center', fill='black', font='monospace', size=15, bold=True)
@@ -125,7 +42,9 @@ def prompt_onMousePress(app, mouseX, mouseY):
 
 def drawPromptScreen(app):
     if not app.writeScreen:
-        drawRect(app.width/2, app.height/2, 600, 400, fill='lavender', border='darkGray', align='center', opacity=90)
+        bg1Width, bg1Height = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/4943857.jpg')
+        drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/4943857.jpg', app.width/2, app.height/2, align='center', width=bg1Width*0.45, height=bg1Height*0.45, opacity=60)
+        drawRect(app.width/2, app.height/2, 600, 400, fill='darkSeaGreen', border='black', align='center', opacity=60)
         if app.nameIndex == 0:
             drawLabel(f'{app.playerNames[app.nameIndex]}, please enter a prompt below: ', app.width/2 - 300 + 18, app.height/2 - 200 + 18, size=20, align='left-top', font='monospace')
             drawLabel('let your imagination run wild...', app.width/2 - 300 + 18, app.height/2 - 200 + 18 + 30, size=15, align='left-top', font='monospace')
@@ -172,6 +91,6 @@ def prompt_onMouseMove(app, mouseX, mouseY):
 def promptConfirmIllum(app):
     if not app.writeScreen:
         if app.promptIllum:
-            drawRect(app.width/2 + (560/2), app.height/2+(45/2) + 68, 70, 45, fill='plum', align='right-bottom', border='darkGray', opacity=60)
+            drawRect(app.width/2 + (560/2), app.height/2+(45/2) + 68, 70, 45, fill='darkSeaGreen', align='right-bottom', border='black', opacity=60)
 
     

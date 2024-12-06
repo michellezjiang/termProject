@@ -1,54 +1,5 @@
 from cmu_graphics import *
 
-def onAppStart(app):
-    ##############
-    #START PAGE APPS
-    ##############
-    #menu dimensions
-    app.height = 800
-    app.width = 800
-    app.menuX = app.width/2
-    app.menuY = app.height/2
-    app.menuWidth = 400
-    app.menuHeight = 500
-
-    #logo
-    app.logoX = app.width/2
-    app.logoY = app.menuY - app.menuHeight/2 - 75
-
-    #startButtons
-    app.newGameX = app.width/2
-    app.newGameY = app.height/2 - 100
-    
-    app.rulesX = app.width/2
-    app.rulesY = app.height/2 + 100
-
-    app.startButtonWidth = 300
-    app.startButtonHeight = 50
-
-    app.illumStartButton = False
-    app.illumRulesButton = False
-
-    ##############
-    #RULES APP
-    ##############
-    #use same dimensions as menu
-    app.drawRule1 = True
-    app.drawRule2 = False
-    app.drawRule3 = False
-    app.drawRule4 = False
-    app.drawRule5 = False
-
-    app.arrowIllumButton = False
-    app.resetIllumButton = False
-    app.homeIllumButton = False
-    app.drawNextPreview = False
-    app.canMove = False
-    app.galleryWord = True
-    app.drawFinishOn = False
-
-    app.erasedPositions = [[]]
-    app.drawHomeIllum = False
 
 def rules_onResize(app):
     app.logoX = app.width/2
@@ -57,8 +8,8 @@ def rules_onResize(app):
 
 def drawRulesBox(app):
     #Image by Freepik (https://www.freepik.com/free-vector/gradient-purple-swirl-background_34709911.htm#fromView=keyword&page=1&position=26&uuid=c5de668e-f514-4325-bada-f9b32c9e8f82)
-    bgWidth, bgHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/8175256.jpg')
-    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/8175256.jpg', app.width/2, app.height/2, align='center', width=0.4*bgWidth, height=0.4*bgHeight)
+    bgWidth, bgHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/4814420.jpg')
+    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/4814420.jpg', app.width/2, app.height/2, align='center', width=0.4*bgWidth, height=0.4*bgHeight, opacity=80)
     #font is from 1001 fonts Fontalicious
     imageWidth, imageHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/rules.png')
     drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/rules.png', app.logoX, app.logoY + 10, width = 0.5*imageWidth, height= 0.5*imageHeight, align='center')

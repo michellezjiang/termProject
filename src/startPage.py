@@ -1,42 +1,5 @@
 from cmu_graphics import *
 
-def onAppStart(app):
-    #menu dimensions
-    app.height = 800
-    app.width = 800
-    app.menuX = app.width/2
-    app.menuY = app.height/2
-    app.menuWidth = 400
-    app.menuHeight = 500
-
-    #logo
-    app.logoX = app.width/2
-    app.logoY = app.menuY - app.menuHeight/2 - 75
-
-    #startButtons
-    app.newGameX = app.width/2
-    app.newGameY = app.height/2 - 100
-    
-    app.rulesX = app.width/2
-    app.rulesY = app.height/2 + 100
-
-    app.startButtonWidth = 300
-    app.startButtonHeight = 50
-
-    app.illumStartButton = False
-    app.illumRulesButton = False
-
-    app.drawNextPreview = False
-    app.canMove = False
-    app.galleryWord = True
-    app.drawFinishOn = False
-
-    app.erasedPositions = [[]]
-    app.drawHomeIllum = False
-
-
-
-
 def onResize(app):
     app.menuX = app.width/2
     app.menuY = app.height/2
@@ -47,12 +10,10 @@ def onResize(app):
     app.logoX = app.width/2
     app.logoY = app.menuY - app.menuHeight/2 - 50
 
-
-
 def drawMenuBox(app):
     #Image by Freepik (https://www.freepik.com/free-vector/gradient-purple-swirl-background_34709911.htm#fromView=keyword&page=1&position=26&uuid=c5de668e-f514-4325-bada-f9b32c9e8f82)
-    bgWidth, bgHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/8175256.jpg')
-    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/8175256.jpg', app.width/2, app.height/2, align='center', width=0.4*bgWidth, height=0.4*bgHeight)
+    bgWidth, bgHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/4814420.jpg')
+    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/4814420.jpg', app.width/2, app.height/2, align='center', width=0.4*bgWidth, height=0.4*bgHeight, opacity=80)
     drawRect(app.menuX, app.menuY, app.menuWidth, app.menuHeight, align='center', fill='lavender', border='black', opacity=90)
     #font is from 1001 fonts Fontalicious
     imageWidth, imageHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/drawphone.png')

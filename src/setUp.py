@@ -1,73 +1,10 @@
 from cmu_graphics import *
 import string
 
-def onAppStart(app):
-    ##############
-    #START PAGE APPS
-    ##############
-    #menu dimensions
-    app.height = 800
-    app.width = 800
-    app.menuX = app.width/2
-    app.menuY = app.height/2
-    app.menuWidth = 400
-    app.menuHeight = 500
-
-    #logo
-    app.logoX = app.width/2
-    app.logoY = app.menuY - app.menuHeight/2 - 75
-
-    #startButtons
-    app.newGameX = app.width/2
-    app.newGameY = app.height/2 - 100
-    
-    app.rulesX = app.width/2
-    app.rulesY = app.height/2 + 100
-
-    app.startButtonWidth = 300
-    app.startButtonHeight = 50
-
-    app.illumStartButton = False
-    app.illumRulesButton = False
-
-    ##############
-    #RULES APP
-    ##############
-    #use same dimensions as menu
-    app.drawRule1 = True
-    app.drawRule2 = False
-    app.drawRule3 = False
-    app.drawRule4 = False
-    app.drawRule5 = False
-
-    app.arrowIllumButton = False
-    app.resetIllumButton = False
-    app.homeIllumButton = False
-
-    ##############
-    #SETUP APPS
-    ##############
-    app.numPlayersStr = ''
-    app.numPlayersConfirmButton = False
-    app.numPlayersConfirmButtonIllum = False
-    app.numPlayersType = False
-    app.numPlayersShow = False
-    app.numPlayersConfirmed = False
-
-    app.playerNames = []
-    app.nameIndex = 1
-    app.nameType = False
-    app.name = ''
-    app.nameConfirm = False
-    app.nameConfirmButtonIllum = False
-    app.drawHomeIllum = False
-
-
-
 def drawSetUpBox(app):
     #Image by Freepik (https://www.freepik.com/free-vector/gradient-purple-swirl-background_34709911.htm#fromView=keyword&page=1&position=26&uuid=c5de668e-f514-4325-bada-f9b32c9e8f82)
-    bgWidth, bgHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/8175256.jpg')
-    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/8175256.jpg', app.width/2, app.height/2, align='center', width=0.4*bgWidth, height=0.4*bgHeight)
+    bgWidth, bgHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/4814420.jpg')
+    drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/4814420.jpg', app.width/2, app.height/2, align='center', width=0.4*bgWidth, height=0.4*bgHeight, opacity=80)
     drawRect(app.menuX, app.menuY, app.menuWidth, app.menuHeight, align='center', fill='lavender', border='black', opacity=90)
     imageWidth, imageHeight = getImageSize('/Users/michellejiang/Documents/GitHub/termProject/src/DrawPhone.png')
     drawImage('/Users/michellejiang/Documents/GitHub/termProject/src/DrawPhone.png', app.logoX, app.logoY, width = 0.5*imageWidth, height= 0.5*imageHeight, align='center')
@@ -76,11 +13,15 @@ def homeButton(app):
     drawRect(8, 8, 90, 45, fill='lavender', border='black', opacity=90)
     drawLabel('Home', 53, 8 + 45/2, size=20, font='monospace')
 
+def drawMode(app):
+    drawLabel("Mode:", app.menuX - app.menuWidth/2 + 25, app.menuY - app.menuHeight/2 + 70, size = 20, align='left', font='monospace')
+    drawRect(app.menuX - app.menuWidth/2 + 25, app.menuY - app.menuHeight/2 + 70 + 50, app.menuWidth/2 - 30, 45, align='left', fill=None, border='black')
+
 def numPlayers(app):
-    drawLabel("Number of Players:", app.menuX - app.menuWidth/2 + 25, app.menuY - app.menuHeight/2 + 70, size = 20, align='left', font='monospace')
-    drawRect(app.menuX + app.menuWidth/2 - 25, app.menuY - app.menuHeight/2 + 70 + 45/2, 125, 45, fill='white', border='darkGray', align='right-bottom')
+    drawLabel("Number of Players:", app.menuX - app.menuWidth/2 + 25, app.menuY - app.menuHeight/2 + 150, size = 20, align='left', font='monospace')
+    drawRect(app.menuX + app.menuWidth/2 - 25, app.menuY - app.menuHeight/2 + 150 + 45/2, 125, 45, fill='white', border='darkGray', align='right-bottom')
     if app.numPlayersConfirmButton:
-        drawRect(app.menuX + app.menuWidth/2 - 25, app.menuY - app.menuHeight/2 + 70 + 45/2+ 60, 70, 45, fill=None, border='black', align='right-bottom')
+        drawRect(app.menuX + app.menuWidth/2 - 25, app.menuY - app.menuHeight/2 + 150 + 45/2+ 60, 70, 45, fill=None, border='black', align='right-bottom')
 
 def setUp_onMousePress(app, mouseX, mouseY):
     if ((8 <= mouseX <= 89) and (8 <= mouseY <= 8 + 45)):
